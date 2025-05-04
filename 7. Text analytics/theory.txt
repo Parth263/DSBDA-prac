@@ -1,1 +1,120 @@
+The NLTK (Natural Language Toolkit) is a powerful Python library used for working with human language data (text). It provides easy-to-use interfaces and tools for:
 
+Tokenization – splitting text into words or sentences
+
+Stopwords removal – filtering out common words like "the", "is", etc.
+
+Stemming is the process of reducing words to their root form by chopping off suffixes (e.g., "playing" → "play", "played" → "play"), often without considering grammar.
+
+Lemmatization also reduces words to their base or dictionary form (lemma) but considers the context and grammar (e.g., "better" → "good", "playing" → "play").
+
+POS tagging – identifying parts of speech (noun, verb, etc.)
+useful in linguistic analysis & NLP applications
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Text classification is the process of assigning predefined categories to text. Here's a short summary of the typical steps:
+
+Data Collection – Gather labeled text data (e.g., spam/ham emails).
+
+Text Preprocessing – Clean the text (remove punctuation, lowercase, tokenize, remove stopwords, etc.).
+
+Feature Extraction – Convert text into numerical form (e.g., using Bag of Words or TF-IDF).
+
+Model Training – Use machine learning algorithms (like Naive Bayes, SVM, or Logistic Regression) to train on labeled data.
+
+Model Evaluation – Test the model using metrics like accuracy, precision, recall.
+
+Prediction – Use the trained model to classify new, unseen text.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Feature Generation using Bag of Words
+Bag of Words (BoW) is the simplest way of extracting features from the text. BoW converts text into the matrix of occurrence of words within a document. This model concerns about whether given words occurred or not in the document.
+Eg - These are three documents:
+Doc1: I love dogs.
+Doc2: I hate dogs & knitting
+Doc3: Knitting is my hobby & my passion.
+
+Now we create a matrix of document and words by counting the occurrence of words in the given document. This matrix is known as Document-Term-Matrix (DTM).
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+TF-IDF is a statistical measure that evaluates how important a word is in a document relative to a collection of documents (corpus).
+
+1.Term Frequency
+It calculates the frequency of a word in a document.
+TF = (No. of times word appears in document) / (Total words in document)
+
+2.Inverse Document Frequency
+It measures the importance of a word by reducing weight of commonly occurring words across documents.
+IDF = log ( Total number of documents / No. of documents containing word )
+
+TF-IDF normalizes the document term matrix.
+It is the product of TF and IDF. Word with high TF-IDF in a document — it is the most of the time occurred in given document and must be absent in other document.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Install Required Libraries
+Install necessary Python libraries for text processing and feature extraction like nltk and scikit-learn.
+
+Example:
+pip install nltk scikit-learn
+
+2. Import Required Modules
+Import functions for:
+
+Tokenization
+
+Stopword removal
+
+Stemming
+
+Lemmatization
+
+TF-IDF vectorization
+
+3. Load Sample Document
+Define a sample text document that will be used for preprocessing.
+
+Example:
+text = "Text preprocessing improves NLP applications and enhances feature extraction"
+
+4. Tokenization
+Break the text into tokens (individual words or sentences) to analyze them individually.
+
+Example:
+tokens = word_tokenize(text)
+
+5. POS (Part of Speech) Tagging
+Assign grammatical categories (like noun, verb, etc.) to each token for advanced processing like lemmatization.
+
+Download tagger with nltk.download('averaged_perceptron_tagger')
+
+Example:
+pos_tags = nltk.pos_tag(tokens)
+
+6. Remove Stopwords
+Eliminate commonly used words (like “the”, “is”, etc.) that don't contribute meaningful information.
+
+Example:
+filtered_words = [word for word in tokens if word.lower() not in stopwords]
+
+7. Stemming / Lemmatization
+Reduce words to their root or base form:
+
+Stemming: Removes suffixes crudely (e.g., "running" → "run")
+
+Lemmatization: Converts to proper dictionary form based on POS (e.g., "running" → "run")
+
+8. Dictionary Form Reduction
+Lemmatize or stem to unify all word variations and reduce ambiguity.
+
+Helps match similar words in different forms.
+
+9. Compute Term Frequency (TF)
+Count how often each word appears in the document.
+
+TF = (No. of times word appears) / (Total number of words)
+
+10. Compute Inverse Document Frequency (IDF)
+Measures how unique or rare a word is across multiple documents.
+
+Rare words get higher weight; common words get lower weight.
+
+11. TF-IDF Vectorization
+Combine TF and IDF to calculate the final weight of each word.
+
+Use TfidfVectorizer() from scikit-learn to automatically generate this representation.
