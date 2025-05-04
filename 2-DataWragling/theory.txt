@@ -11,6 +11,36 @@ understanding of the variable, to convert a non-linear relation into a linear on
 decrease the skewness and convert the distribution into a normal distribution.
 Reason and document your approach properly.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Pandas is a powerful Python library used for data manipulation, analysis, and reading/writing data in formats like CSV, Excel, JSON, SQL, etc.
+* df['math score'].fillna(value = m_v, inplace=True)
+fillna(): Replaces the NaN (missing) values in the 'math score' column with the calculated mean value m_v.
+inplace=True: Modifies the original DataFrame df directly without creating a new DataFrame.
+* min_v = df['Placement Score'].min()
+Calculates the minimum value of the 'Placement Score' column in the DataFrame df.
+The result is stored in the variable min_v.
+*df['log_math']: Refers to the 'log_math' column in the DataFrame df.
+plot(kind='hist'): This creates a histogram to visualize the distribution of values in the 'log_math' column
+
+*df['math score']: Refers to the 'math score' column in the DataFrame df.
+
+skew(): This function calculates the skewness of the data in the 'math score' column.
+
+✅ Skewness Explanation:
+Skewness is a measure of the asymmetry of the distribution of values in a dataset.
+
+Positive skew: The right tail (higher values) is longer or fatter, meaning most of the data is concentrated on the left side.
+
+Negative skew: The left tail (lower values) is longer or fatter, meaning most of the data is concentrated on the right side.
+
+Zero skew: The distribution is approximately symmetric (e.g., normal distribution).
+
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Techniques to Handle Null Values
 Imputation Methods
 
