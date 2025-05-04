@@ -4,3 +4,39 @@ about the passengers who boarded the unfortunate Titanic ship. Use the Seaborn l
 to see if we can find any patterns in the data.
 2. Write a code to check how the price of the ticket (column name: 'fare') for each
 passenger is distributed by plotting a histogram
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IN CODE :-
+1. import pandas as pd
+   Purpose: Powerful data analysis and data manipulation tool.
+2.  import numpy as np
+Purpose: Fundamental library for numerical computations in Python.
+3. import matplotlib.pyplot as plt
+Purpose: Core plotting library for visualizing data.
+4. import seaborn as sns
+Purpose: High-level interface for drawing attractive and informative statistical graphics (built on top of matplotlib).sns.heatmap(), sns.countplot(), sns.boxplot()
+5. dataset.describe() is a Pandas function that provides a statistical summary of the numeric columns in a DataFrame.
+6. dataset.dtypes is a Pandas attribute that returns the data type of each column in a DataFrame
+7. dataset.isnull().sum() is a Pandas command used to identify and count missing (null) values in each column of a DataFrame.
+
+🔍 What it does:
+isnull() creates a DataFrame of the same shape with True where values are missing.
+
+sum() adds up True values (treated as 1), giving the count of missing values per column.
+
+8. A DataFrame is a 2-dimensional, tabular data structure in Pandas (Python library), similar to an Excel spreadsheet or an SQL table.
+9. The line sns.distplot(dataset['Fare']) uses Seaborn to plot the distribution of the Fare column from a dataset—typically used in datasets like Titanic.
+10. The line sns.distplot(dataset['Fare']) uses Seaborn to plot the distribution of the Fare column from a dataset—typically used in datasets like Titanic.If you pass a hue='column_name', it color-codes the plots by category.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALGORITHM :-
+1. Install and import required libraries
+2. titanic dataset is built into seaborn making it easy to load
+3. understanding dataset structure by checking basic information - dataset.info() , dataset,describe()
+4. checking for missing values to understand data quality
+5. distribution of ticket prices using hostogram
+6. histogram with defined number of bins to get better insight
+7. scatterplot between age and fare
+8. rugplot for fare distribution
+9. barplot for avg based on gender
+10. countplot to show the frequency distribution of fare values
+11. box plot with hue for survival analysis
+12. vision plot for age distribution by survival
