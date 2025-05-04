@@ -3,3 +3,65 @@ Data Visualization II
 distribution of age with respect to each gender along with the information about whether
 they survived or not. (Column names : 'sex' and 'age')
 2. Write observations on the inference from the above statistics.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IN CODE :-
+1. import pandas as pd
+   Purpose: Powerful data analysis and data manipulation tool.
+2.  import numpy as np
+Purpose: Fundamental library for numerical computations in Python.
+3. import matplotlib.pyplot as plt
+Purpose: Core plotting library for visualizing data.
+4. import seaborn as sns
+Purpose: High-level interface for drawing attractive and informative statistical graphics (built on top of matplotlib).sns.heatmap(), sns.countplot(), sns.boxplot()
+5. dataset.describe() is a Pandas function that provides a statistical summary of the numeric columns in a DataFrame.
+6. dataset.dtypes is a Pandas attribute that returns the data type of each column in a DataFrame
+7. dataset.isnull().sum() is a Pandas command used to identify and count missing (null) values in each column of a DataFrame.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EXTRA :-
+A box plot is used to display the distribution of numerical data based on five summary statistics:
+
+Minimum (Q0): The smallest data point (excluding outliers)
+First quartile (Q1): The 25th percentile (lower quartile)
+Median (Q2): The 50th percentile (middle value)
+Third quartile (Q3): The 75th percentile (upper quartile)
+Maximum (Q4): The largest data point (excluding outliers)
+
+Additionally box plots help in detecting outliers as they represent extreme values beyond 1.5 times the interquartile range (IQR)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Import Required Libraries
+To create data visualizations, import the necessary Python libraries:
+
+import pandas as pd  
+import numpy as np  
+import matplotlib.pyplot as plt  
+import seaborn as sns  
+
+2. Load the Dataset
+Load the dataset using pandas:
+
+dataset = pd.read_csv('/content/detail.csv')  
+dataset.head()  # Display the first few rows  
+
+3. Plot Boxplot for Age Distribution by Gender
+Visualize the distribution of age across different genders:
+sns.boxplot(x='sex', y='Age', data=dataset)  
+
+4. Modify Boxplot to Include Survival Information
+Add a hue parameter to distinguish survival status based on age and gender:
+sns.boxplot(x='sex', y='Age', data=dataset, hue="SnowRed")
+
+5. Alternative Way to Load Datasets
+Use Seaborn's built-in dataset function for convenience:
+fps = sns.load_dataset("fps")  
+
+6. Boxplot for FPS Distribution by Survival Status
+Analyze the relationship between FPS profiles and survival ratio:
+sns.boxplot(x='SnowRed', y='Fpsd', data=dataset)  
+
+7. Interpret Observations from Boxplots
+Key insights:
+Younger passengers had a higher survival probability.
+Passengers who paid higher fares had better survival chances.
+
+8. Save and Display the Plots
+plt.show()  
