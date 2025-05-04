@@ -1,0 +1,82 @@
+A. x_scaled = min_max_scaler.fit_transform(x)
+i min_max_scaler: a MinMaxScaler object from sklearn.preprocessing.
+
+ii .fit_transform(x):
+fit: computes the min and max values of each feature (column).
+transform: scales each value to a 0–1 range
+
+B. df_normalized = pd.DataFrame(x_scaled)
+df_normalized
+pd.DataFrame(x_scaled):
+Converts the NumPy array x_scaled (from MinMaxScaler) back into a Pandas DataFrame.
+
+df_normalized:
+A new DataFrame where each feature (column) is normalized to a range between 0 and 1.
+
+df_normalized (last line):
+Displays the contents of the normalized DataFrame in a notebook or console.
+
+C. i. label_encoder = preprocessing.LabelEncoder()  
+Creates an instance of LabelEncoder from sklearn.preprocessing.
+This encoder converts categorical (text) labels into numeric codes.
+
+ii. df['Species'] = label_encoder.fit_transform(df['Species'])  
+* Takes the 'Species' column (which contains text labels like 'setosa', 'versicolor', etc.).
+* Applies fit_transform(), which:
+    fit(): identifies unique categories.
+    transform(): replaces each label with a corresponding integer (e.g., 'setosa' → 0, 'versicolor' → 1, etc.).
+
+* The transformed numeric labels are then assigned back to the 'Species' column in the DataFrame
+
+D. features_df = df.drop(columns=['Species'])
+df.drop(columns=['Species']):
+Removes the 'Species' column from the DataFrame df.
+This is typically done when you want a features-only DataFrame (excluding the target/label column).
+
+features_df:
+Stores the resulting DataFrame that contains only the input features (independent variables).
+
+E. enc = preprocessing.OneHotEncoder()
+Creates an instance of OneHotEncoder from sklearn.preprocessing.
+OneHotEncoder transforms categorical values into binary vectors (e.g., 'setosa' → [1 0 0], 'versicolor' → [0 1 0], etc.).
+
+*enc_df = pd.DataFrame(enc.fit_transform(df[['Species']]).toarray())
+df[['Species']] passes the 'Species' column as a DataFrame (2D input is required).
+fit_transform():
+fit learns the unique categories in 'Species'.
+transform converts each category into a one-hot encoded binary vector.
+.toarray() converts the output from sparse matrix to NumPy array.
+pd.DataFrame(...) converts that array into a DataFrame, which is stored in enc_df.
+
+F. one_hot_df = pd.get_dummies(df, prefix="Species", columns=['Species'], drop_first=True)
+pd.get_dummies():
+Creates one-hot encoded columns for categorical data.
+
+df:
+The original DataFrame containing the 'Species' column to encode.
+
+columns=['Species']:
+Specifies the column(s) to be one-hot encoded.
+
+prefix="Species":
+Sets the prefix for new column names (e.g., Species_versicolor, Species_virginica).
+
+drop_first=True:
+Drops the first category to avoid dummy variable trap (perfect multicollinearity in regression).
+
+G. df.dropna(inplace=True)  # Remove rows with missing values
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALGORITHM :-
+1.Data Loading: Import and load the dataset.
+
+2.Data Cleaning: Handle missing values and duplicates.
+
+3.Exploratory Analysis: Understand data distributions and types.
+
+4.Normalization/Scaling: Prepare numerical features for modeling.
+
+5.Categorical Encoding: Convert text data to numerical form.
+
+6.Outlier Handling: Identify and remove anomalies.
+
+7.Final Verification: Ensure all transformations are correctly applied.
