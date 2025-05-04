@@ -1,0 +1,106 @@
+Data Analytics I
+Create a Linear Regression Model using Python/R to predict home prices using Boston Housing
+Dataset (https://www.kaggle.com/c/boston-housing). The Boston Housing dataset contains
+information about various houses in Boston through different parameters. There are 506 samples
+and 14 feature variables in this dataset.
+The objective is to predict the value of prices of the house using the given features.
+
+
+🔹 Part 1: Using Simple Dataset (Univariate Linear Regression)
+Step 1: Importing Libraries
+Import necessary Python libraries like:
+
+NumPy for numerical calculations.
+
+Pandas for handling data structures.
+
+Matplotlib for visualizing the results.
+
+Step 2: Creating the Dataset
+Define input (independent) and output (dependent) variables.
+
+Store the values in array format using NumPy.
+
+Step 3: Building the Linear Regression Model
+Use a method (like polyfit) to fit a line to the dataset.
+
+The model generates coefficients (slope and intercept) representing the regression line.
+
+Step 4: Observing Model Coefficients
+Extract and display the slope and intercept of the regression line.
+
+Step 5: Making Predictions
+Use the regression model to predict output values for given inputs.
+
+Evaluate the predicted output for a new input (e.g., predicting value when x = 65).
+
+Step 6: Predicting for All Inputs
+Generate predicted values for the entire dataset using the model.
+
+This provides the model’s estimated outputs corresponding to each input.
+
+Step 7: Evaluating Model Performance
+Use performance metrics:
+
+R² (R-squared) to determine how well the model explains the variance in the data.
+
+A higher R² indicates a better-fitting model.
+
+Step 8: Visualizing the Results
+Plot the original data points.
+
+Plot the regression line using the model.
+
+Show predicted values as scatter points to compare against actual data.
+
+
+
+🔹 Part 2: Using a Real Dataset (Boston Housing Dataset - Multivariate Regression)
+Step 1: Importing Libraries
+Import libraries for data handling (pandas), numeric processing (numpy), visualization (matplotlib), and machine learning (sklearn).
+
+Step 2: Loading the Dataset
+Load the Boston housing dataset from scikit-learn’s built-in datasets.
+
+Step 3: Creating the Dataframe
+Convert the dataset into a structured pandas DataFrame for easier analysis.
+
+Step 4: Naming the Features
+Assign feature names to the DataFrame columns to represent various housing attributes.
+
+Step 5: Adding the Target Variable
+Append the target variable (house prices) as a separate column in the DataFrame.
+
+Step 6: Data Preprocessing
+Check for missing or null values to ensure data quality before training.
+
+Step 7: Defining Features and Target
+Separate the input features (X) and the output target (y) from the dataset.
+
+Step 8: Splitting Data
+Divide the dataset into training and testing sets using a function like train_test_split.
+
+Helps evaluate model performance on unseen data.
+
+Step 9: Creating and Training the Model
+Initialize and train the linear regression model using the training data.
+
+The model learns the relationship between features and target.
+
+Step 10: Making Predictions
+Use the trained model to predict outputs for both training and testing data.
+
+Step 11: Evaluating Model Performance
+Compare actual and predicted outputs.
+
+Create a data frame to display these comparisons for easier analysis.
+
+Step 12: Calculating Performance Metrics
+Calculate Mean Squared Error (MSE) and R-Squared (R²) for both training and test sets to measure prediction accuracy.
+
+Step 13: Visualizing Results
+Plot true values vs predicted values for both training and test sets.
+
+Use different colors and markers for clarity.
+
+Visual comparison helps in understanding how well the model performs.
