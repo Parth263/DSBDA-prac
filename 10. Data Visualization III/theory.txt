@@ -1,0 +1,63 @@
+Data Visualization III
+Download the Iris flower dataset or any other dataset into a DataFrame. (e.g.,
+https://archive.ics.uci.edu/ml/datasets/Iris ). Scan the dataset and give the inference as:
+1. List down the features and their types (e.g., numeric, nominal) available in the dataset.
+2. Create a histogram for each feature in the dataset to illustrate the feature distributions.
+3. Create a box plot for each feature in the dataset.
+4. Compare distributions and identify outliers.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+IN CODE :-
+* import numpy as np
+  Purpose: Fundamental library for numerical computations in Python.
+* import pandas as pd
+  Purpose: Powerful data analysis and data manipulation tool.
+* np.unique(df["col5"]) -  returns all the unique values in the column col5 of a DataFrame df, using NumPy.
+*%matplotlib inline is a magic command used in Jupyter Notebooks to display matplotlib plots directly below the code cell that produces them.
+* fig, axes = plt.subplots(2, 2, figsize=(16, 8)) - The line fig, axes = plt.subplots(2, 2, figsize=(16, 8)) is used in Matplotlib to create a grid of subplots—in this case, a 2x2 grid (4 plots).
+
+* data_to_plot = [df["col1"], df["col2"], df["col3"], df["col4"]]:
+Creates a list containing four columns (col1, col2, col3, col4) from the DataFrame df. These columns will be used as the data for the boxplot.
+
+* sns.set_style("whitegrid"):
+Sets the Seaborn style for the plot to "whitegrid", which adds a white background with gridlines, making the plot easier to read.
+
+*fig = plt.figure(1, figsize=(12,8)):
+Creates a figure instance with the given ID (1) and specifies the size of the figure (12x8 inches). This is the overall canvas where all subplots will be drawn.
+
+*ax = fig.add_subplot(111):
+Adds a single subplot to the figure (111 indicates 1 row, 1 column, and the 1st subplot). This is where the boxplot will be drawn.
+
+*bp = ax.boxplot(data_to_plot):
+Creates the boxplot on the axes ax using the data in data_to_plot (the four columns in the DataFrame). 
+A boxplot displays the distribution of a dataset based on the minimum, first quartile (Q1), median, third quartile (Q3), and maximum.
+
+
+
+Importance of Data Visualizations in EDA
+Exploratory Data Analysis (EDA) is an essential step in the data science process. By visualizing data, we can:
+
+1.  Identify patterns and trends in the dataset.
+2.  Detect outliers and anomalies.
+3.  Understand the distribution of numerical features.
+4.  Evaluate relationships between variables.
+5.  Gain insights before applying machine learning models.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALGORITHM :-
+1. Import Required Libraries
+2. Load the Dataset
+3. View Initial Rows
+Get a quick look at the dataset structure using head().
+4. Check the Number of Columns
+Determine how many columns are present in the dataset.
+5. Explore Class Labels
+Check unique values in categorical columns to understand class distribution.
+6. Analyze Attributes
+Compute basic statistical measures for numerical features:
+7. Visualize Feature Distributions with Histograms
+Create histograms for all numerical columns to analyze distribution shapes.
+8. Box Plot for Each Feature
+Box plots provide a compact summary of data spread, skewness, and outliers.
+9. Outlier Detection Using IQR
+Use statistical techniques (IQR method) to identify rows with outlier values.
+10. Pair Plot for Class-wise Comparison
+Pair plots visualize relationships between features, colored by class labels.
