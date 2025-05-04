@@ -1,3 +1,170 @@
+In Code :-
+* from nltk.tokenize import sent_tokenize #It imports the sent_tokenize function from NLTK’s tokenize module.
+* nltk.download('punkt') #punkt is a data package NLTK uses internally to break text into sentences or words.
+* FreqDist stands for "Frequency Distribution." It calculates and stores the frequency (count) of each unique token in a list.
+* FreqDist will count how many times each unique word or token appears in the list.
+* from nltk.corpus import stopwords - This line imports the stopwords module from the nltk.corpus package.
+* WordNet is a large English dictionary organized by synonyms, antonyms, and semantic relationships.
+* # Lemmatize the word with POS tag 'v' (verb)
+  print("Lemmatized Word:", lem.lemmatize(word, "v"))
+
+* # Stem the word using PorterStemmer
+  print("Stemmed Word:", stem.stem(word))
+* pandas is a powerful Python library used for data analysis, manipulation, and handling tabular data.
+* The data.head() function is a method in pandas used to preview the first few rows of a DataFrame.
+*The data.info() function in pandas provides a concise summary of a DataFrame, including information about the data types, the number of non-null entries, and the memory 
+usage.
+* The data.Sentiment.value_counts() function in pandas is used to count the number of occurrences of each unique value in the Sentiment column of your DataFrame.
+* The import matplotlib.pyplot as plt line is used to import the matplotlib.pyplot module with the alias plt(variable)
+* plt.bar(Sentiment_count.index.values, Sentiment_count['Phrase']) - Sentiment_count.index.values -  will be the x-axis (labels like "Positive", "Negative", "Neutral").
+
+Sentiment_count['Phrase'] - will be the y-axis (values like 50, 30, 20), showing the count of each sentiment.
+* CountVectorizer is from sklearn and is used to convert a collection of text documents into a matrix of token counts.
+
+* RegexpTokenizer is from nltk and is used to split the text into tokens (words) using a regular expression.
+* token = RegexpTokenizer(r'[a-zA-Z0-9]+') - This custom tokenizer ensures that only meaningful words are extracted, and punctuation is ignored
+
+*  lowercase=True: Converts all text to lowercase before processing. This avoids treating the same word in different cases (e.g., "Apple" and "apple") as different words.
+
+   stop_words='english': This removes common English stopwords (e.g., "and," "the," "is") during tokenization.
+
+   ngram_range=(1,1): This means you're only looking at unigrams (single words) and not bigrams (pairs of words) or higher n-grams.
+
+   tokenizer=token.tokenize: This specifies that the custom tokenizer (RegexpTokenizer) will be used to split the text into tokens.
+
+*  train_test_split: This function splits the dataset into training and testing subsets.
+
+Training data (X_train, y_train): Used to train the machine learning model.
+
+Testing data (X_test, y_test): Used to evaluate the model's performance.
+
+Parameters:
+
+text_counts: The features (the document-term matrix containing the word counts from the CountVectorizer).
+
+data['Sentiment']: The target labels (the sentiments of the text, such as "Positive", "Negative", etc.).
+
+test_size=0.3: Specifies that 30% of the data should be used for testing, leaving 70% for training.
+
+random_state=1: Ensures that the data is split in the same way every time the code is run, which is important for reproducibility.
+
+* Importing Libraries:
+
+MultinomialNB: A Naive Bayes classifier that is well-suited for text classification problems, especially when the features (like word counts) are represented as counts or 
+frequencies.
+
+metrics: This is used to evaluate the model's performance. In this case, accuracy_score is used to measure the accuracy of predictions.
+
+Training the Classifier:
+
+clf = MultinomialNB().fit(X_train, y_train):
+
+This line initializes a Multinomial Naive Bayes classifier and fits it to the training data (X_train for features, y_train for the target sentiment labels).
+
+The model learns how to associate the word counts with the sentiment labels.
+
+Making Predictions:
+
+predicted = clf.predict(X_test):
+
+After training, the classifier is used to predict the sentiment of the test data (X_test), which contains unseen text data.
+
+The result is stored in the predicted variable.
+
+Evaluating the Model:
+
+metrics.accuracy_score(y_test, predicted):
+
+This function compares the predicted sentiment labels (predicted) with the true labels (y_test) from the test set.
+
+It calculates the accuracy as the proportion of correct predictions out of all test samples.
+
+The accuracy is printed, giving a measure of how well the classifier performed on the test data.
+
+🧠 Why Use Multinomial Naive Bayes for Text Classification?
+Multinomial Naive Bayes is commonly used in text classification tasks, as it works well with discrete features like word counts or frequencies.
+
+* TfidfVectorizer():
+
+This class is used to convert a collection of text documents into a matrix of TF-IDF features.
+
+TF-IDF stands for Term Frequency-Inverse Document Frequency, and it reflects how important a word is to a document in a collection (corpus).
+
+Term Frequency (TF) measures how frequently a term occurs in a document.
+
+Inverse Document Frequency (IDF) adjusts the term frequency based on how frequently the term appears across all documents, reducing the importance of common words (e.g., "the," "is").
+
+fit_transform():
+
+fit(): This method learns the vocabulary and computes the inverse document frequency (IDF) values based on the provided text data.
+
+transform(): This method transforms the text data into a TF-IDF matrix, where each row corresponds to a document, and each column represents a word in the vocabulary. The values represent the TF-IDF score of each word in the document.
+
+text_tf:
+
+This variable stores the resulting TF-IDF matrix after fitting and transforming the text data from the Phrase column.
+
+📘 Explanation:
+train_test_split:
+
+This function is used to split the dataset into two parts: a training set and a test set.
+
+Training data (X_train, y_train): This will be used to train the machine learning model.
+
+Testing data (X_test, y_test): This will be used to evaluate the model's performance.
+
+Parameters:
+
+text_tf: The feature matrix obtained from the TF-IDF transformation of the text data.
+
+data['Sentiment']: The target variable that contains sentiment labels for the text data.
+
+test_size=0.3: Specifies that 30% of the data will be used for the test set, and the remaining 70% will be used for training the model.
+
+random_state=123: Ensures that the data split is reproducible by setting a fixed seed for the random number generator.
+
+🧠 Why Split the Data?
+Training set: Used to fit and train the model so it learns patterns from the data.
+
+Test set: Used to evaluate how well the model generalizes to unseen data and checks for overfitting (whether the model has learned specific details that do not apply to new data).
+
+* 📘 Explanation:
+Importing Libraries:
+
+MultinomialNB: This is the Naive Bayes classifier, which is commonly used for text classification tasks. It works well when the features are discrete, like word counts or TF-IDF scores.
+
+metrics: This contains various functions for model evaluation. Here, we use accuracy_score to measure the accuracy of the classifier's predictions.
+
+Training the Model:
+
+clf = MultinomialNB().fit(X_train, y_train):
+
+We initialize a Multinomial Naive Bayes classifier and fit it to the training data (X_train for features, y_train for target labels).
+
+The model learns how the TF-IDF features are related to the sentiment labels.
+
+Making Predictions:
+
+predicted = clf.predict(X_test):
+
+After training, we use the classifier to predict the sentiment of the test data (X_test), which contains unseen text data.
+
+The predictions are stored in the predicted variable.
+
+Evaluating the Model:
+
+metrics.accuracy_score(y_test, predicted):
+
+This function compares the predicted labels (predicted) with the true labels (y_test) from the test set.
+
+It calculates the accuracy, which is the proportion of correct predictions out of all test samples.
+
+The accuracy is then printed, giving an indication of how well the classifier performed on the test data.
+
+🧠 Why Use Multinomial Naive Bayes for Text Classification?
+Multinomial Naive Bayes is effective for text classification, especially with high-dimensional data (e.g., many words).
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+EXTRA :-
 The NLTK (Natural Language Toolkit) is a powerful Python library used for working with human language data (text). It provides easy-to-use interfaces and tools for:
 
 Tokenization – splitting text into words or sentences
