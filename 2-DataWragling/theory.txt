@@ -10,3 +10,38 @@ transformation should be one of the following reasons: to change the scale for b
 understanding of the variable, to convert a non-linear relation into a linear one, or to
 decrease the skewness and convert the distribution into a normal distribution.
 Reason and document your approach properly.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Techniques to Handle Null Values
+Imputation Methods
+
+Mean Imputation:
+Best for numerical data with normal distribution.
+df['column'].fillna(df['column'].mean(), inplace=True)
+
+Median Imputation:
+More suitable for skewed numerical data.
+df['column'].fillna(df['column'].median(), inplace=True)
+
+Mode Imputation:
+Used for categorical data.
+df['column'].fillna(df['column'].mode()[0], inplace=True)
+
+Identification of Null Values
+Use the isnull() function to detect null values:
+df.isnull().sum()  # Counts null values per column
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Algorithm :-
+1. Data Loading: Import dataset using pandas
+
+2. Null Value Treatment:
+Detection with isnull().sum()
+Imputation using mean/median
+
+3. Outlier Management:
+Visualization with boxplots
+Removal via Z-score (|Z| > 3)
+Transformation using log10
+
+4.Result Verification:
+Comparative histogram visualization
+
