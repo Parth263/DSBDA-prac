@@ -1,0 +1,85 @@
+Descriptive Statistics - Measures of Central Tendency and variabilityPerform the following operations on any open source dataset (e.g., data.csv)
+1. Provide summary statistics (mean, median, minimum, maximum, standard deviation) for
+a dataset (age, income etc.) with numeric variables grouped by one of the qualitative
+(categorical) variable. For example, if your categorical variable is age groups and
+quantitative variable is income, then provide summary statistics of income grouped by
+the age groups. Create a list that contains a numeric value for each response to the
+categorical variable.
+2. Write a Python program to display some basic statistical details like percentile, mean,
+
+standard deviation etc. of the species of ‘Iris-setosa’, ‘Iris-versicolor’ and ‘Iris-
+versicolor’ of iris.csv dataset.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+A. df.select_dtypes(include='number').mean()
+df: Refers to your pandas DataFrame.
+select_dtypes(include='number'): Selects only the columns in the DataFrame that are of numeric data types (e.g., int64, float64).
+.mean(): Computes the mean (average) of each numeric column.
+
+B. df.loc[:, 'CustomerID'].median()
+df.loc[:, 'CustomerID']: Selects all rows (:) for the column 'CustomerID'.
+.median(): Calculates the median (middle value) of the CustomerID column.
+
+C. df.groupby(['Genre'])['Age'].mean()
+df.groupby(['Genre']): Groups the DataFrame by unique values in the Genre column.
+['Age']: Selects the Age column for aggregation.
+.mean(): Computes the average age for each genre group.
+
+D. df_u = df.rename(columns={'Annual Income (k$)': 'Income'}, inplace=False)
+df_u
+df.rename(...): Renames columns in the DataFrame.
+columns={'Annual Income (k$)': 'Income'}: Specifies that the column 'Annual Income (k$)' should be renamed to 'Income'.
+inplace=False: Ensures that the original df is not modified, and the renamed DataFrame is returned.
+df_u = ...: Stores the result in a new DataFrame df_u.
+
+E. df.mode() - Computes the mode (most frequent value) for each column in the DataFrame.
+
+F. irisVir = (iris['Species'] == 'Iris-virginica')
+Checks whether each value in the Species column of the iris DataFrame is equal to 'Iris-virginica'.
+Returns a Boolean Series (True/False) for each row.
+Stores that Boolean Series in the variable irisVir.
+
+G. print(iris[irisVir].describe())
+iris[irisVir]: Filters the iris DataFrame to include only rows where the Species is 'Iris-virginica'.
+.describe(): Generates descriptive statistics for the numeric columns in the filtered data.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ALGORITHM :-
+Step 1: Import Required Libraries
+Begin by importing necessary Python libraries such as:
+pandas for data manipulation,
+numpy for numerical computations,
+sklearn.preprocessing for data preprocessing like one-hot encoding.
+
+Step 2: Load the Dataset
+Read the CSV file Mall_Customers.csv into a DataFrame named df using pandas.read_csv(). This makes the data ready for analysis.
+
+Step 3: Explore the Dataset
+Display the contents of the dataset to understand its structure and observe data types, column names, and initial values.
+
+Step 4: Perform Descriptive Statistical Analysis
+Calculate basic statistics to summarize the data:
+Mean of all numerical columns and specific ones like Age or CustomerID.
+Median values for understanding central tendency.
+Mode values to identify the most frequent entries.
+Maximum and minimum values for range analysis.
+Standard deviation to assess data dispersion.
+Row-wise computations for early data samples to inspect trends.
+
+Step 5: Group-Wise Analysis
+Group the dataset by categorical attributes (e.g., Gender) and compute summary statistics like the average age for each group. This helps reveal demographic patterns.
+
+Step 6: Rename Columns for Simplicity
+Rename columns such as 'Annual Income (k$)' to simpler names like 'Income' for ease of use in further processing.
+
+Step 7: Encode Categorical Variables
+Apply one-hot encoding to transform categorical values (like Gender) into numerical format. This involves:
+Using OneHotEncoder from sklearn,
+Converting the result into a DataFrame,
+Joining it back with the main dataset to retain structure.
+
+Step 8: Load a New Dataset
+Import the Iris.csv dataset, a standard classification dataset, into a new DataFrame for species-based analysis.
+
+Step 9: Filter and Analyze Each Iris Species
+For each species in the Iris dataset (Iris-setosa, Iris-versicolor, and Iris-virginica):
+Apply a filter condition,
+Use .describe() to compute and display summary statistics (count, mean, std, min, max, quartiles).
