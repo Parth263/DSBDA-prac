@@ -36,6 +36,36 @@ Recall measures how many actual positive cases were correctly identified.
 4. F-measure (F1-Score)
 The F-measure is the harmonic mean of precision and recall, used to compare the performance of classifier models.
 
+E. The sigmoid function (also called the logistic function) produces an S-shaped curve that maps any real-valued number to a value between 0 and 1.
+
+Key Properties:
+1. Output Range:
+If the input approaches positive infinity, the predicted value becomes 1.
+
+If the input approaches negative infinity, the predicted value becomes 0.
+
+2. Classification Threshold (0.5):
+
+If the sigmoid output is ≥ 0.5, the result is classified as 1 (YES).
+
+If the sigmoid output is < 0.5, the result is classified as 0 (NO).
+
+F. types of logistic regression:
+
+1. Binary Logistic Regression
+Purpose: Predicts one of two possible outcomes (e.g., Yes/No, 0/1).
+
+Example: Spam detection (spam = 1, not spam = 0).
+
+2. Multinomial Logistic Regression
+Purpose: Predicts 3+ unordered categories (e.g., animal types: cat/dog/bird).
+
+Key: No inherent ranking among classes.
+
+3. Ordinal Logistic Regression
+Purpose: Predicts ordered categories (e.g., ratings: Low/Medium/High).
+
+Key: Respects the hierarchy between classes.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 1. Data Preparation Phase
 1. Import necessary libraries:
