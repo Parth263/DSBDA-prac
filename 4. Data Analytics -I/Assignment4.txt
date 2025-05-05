@@ -4,8 +4,29 @@ Dataset (https://www.kaggle.com/c/boston-housing). The Boston Housing dataset co
 information about various houses in Boston through different parameters. There are 506 samples
 and 14 feature variables in this dataset.
 The objective is to predict the value of prices of the house using the given features.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* Linear Regression is a supervised machine learning algorithm used for predicting a continuous dependent variable based on one or more independent variables. It models the relationship between the variables by fitting a straight line (in the case of simple linear regression) to the observed data.
+Y=β0 + βX + ε
+Y: Dependent variable (target)
+X: Independent variable (input)
+𝛽0: Intercept of the line
+𝛽1 : Slope of the line (regression coefficient)
+ε: Error term (difference between actual and predicted value)
 
+A. univarite - one independent variable to predict dependent variable
+B. multivarite - multiple independent variables to predict dependent variable
 
+* The Least Squares Method is a mathematical approach used in linear regression to find the best-fitting line by minimizing the sum of the squares of the residuals (errors).
+∑(Yi − Y^i) ^ 2
+Yi  = actual value
+Y^i = predicted value from the line (y-cap)
+(Yi − Y^i) =  residual (error)
+
+* To predict how well our model predicts house prices , we use two key matrics 
+i.  Mean Squared Error (MSE): It is a measure of the average squared difference between the actual and predicted values. A lower MSE indicates a better fit of the model.        It’s calculated as:
+    MSE = 1/n ∑(Yi − Y^i) ^ 2
+ii. R-squared Score (R²): It represents the proportion of the variance in the dependent variable that is predictable from the independent variable(s). It is between 0 and 1, with 1 meaning perfect prediction
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 🔹 Part 1: Using Simple Dataset (Univariate Linear Regression)
 Step 1: Importing Libraries
 Import necessary Python libraries like:
