@@ -2,3 +2,119 @@ A. Logistic Regression is a statistical model used for binary classification tas
     Instead of predicting exact values like in linear regression, it predicts the probability that a given input belongs to a particular class using the.It’s widely used in spam detection, disease diagnosis, fraud detection, etc.
 B.  from sklearn.linear_model import LogisticRegression
     is used to import the LogisticRegression class from scikit-learn, which allows you to create and train a logistic regression model.
+
+C. Confusion Matrix
+
+Once the logistic regression model has been trained and tested, we need to evaluate its performance. One of the most effective ways to do this is by using the Confusion Matrix. It provides a detailed breakdown of how well the model has classified the data, showing the number of correct and incorrect predictions.
+
+A confusion matrix is a table used to evaluate the performance of a classification model.
+
+Components of the Confusion Matrix:
+True Positive (TP):
+The model correctly predicted positive (1) when the actual value was also positive (1).
+Example: The model correctly predicted that a user purchased the product.
+
+False Negative (FN):
+The model predicted negative (0) but the actual value was positive (1).
+Example: The model predicted that a user did not purchase the product, but in reality, they did.
+
+False Positive (FP):
+The model predicted positive (1) but the actual value was negative (0).
+Example: The model predicted that a user purchased the product, but they did not.
+
+True Negative (TN):
+The model correctly predicted negative (0) when the actual value was also negative (0).
+Example: The model correctly predicted that a user did not purchase the product.
+
+D. Performance Metrics Defined from the Confusion Matrix
+1. Accuracy
+Accuracy is the ratio of correctly predicted observations to the total observations. It provides a general measure of how often the model is correct.
+2. Precision
+Precision measures how many of the predicted positive cases were actually positive.
+3.Recall (Sensitivity or True Positive Rate)
+Recall measures how many actual positive cases were correctly identified.
+4. F-measure (F1-Score)
+The F-measure is the harmonic mean of precision and recall, used to compare the performance of classifier models.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. Data Preparation Phase
+1. Import necessary libraries:
+pandas (for data manipulation)
+numpy (for numerical operations)
+sklearn (for machine learning tools)
+train_test_split (for data splitting)
+LogisticRegression (for model)
+confusion_matrix (for evaluation)
+
+2. Load the dataset:
+
+Read the CSV file into a pandas DataFrame
+
+Example: df = pd.read_csv('/content/data5.csv')
+
+3. Preprocess the data:
+
+Drop irrelevant columns (e.g., 'Genre' column)
+
+Separate features (X) and target variable (y)
+
+Features: all columns except last
+
+Target: last column
+
+2. Model Training Phase
+4. Split the data:
+
+Divide into training (75%) and testing (25%) sets
+
+Set random_state for reproducibility
+
+5.Initialize and train the model:
+
+Create LogisticRegression instance
+
+Fit the model to training data (X_train, y_train)
+
+3. Evaluation Phase
+6. Make predictions on test set:
+
+Use trained model to predict y_test values
+
+7. Compute confusion matrix:
+
+Extract TN, FP, FN, TP values
+
+8. Calculate performance metrics:
+
+Accuracy = (TN + TP) / (TP + TN + FP + FN)
+
+Precision = TP / (TP + FP)
+
+Recall = TP / (TP + FN)
+
+F1 Score = 2 * (Precision * Recall) / (Precision + Recall)
+
+Specificity = TN / (TN + FP)
+
+9. Display evaluation metrics:
+
+Print all calculated metrics with appropriate formatting
+
+4. Prediction Phase
+10 Get user input for new prediction:
+
+Prompt user to enter values for each feature
+
+Store values in a list
+
+11. Prepare input for prediction:
+
+Convert list to numpy array
+
+Reshape to match model's expected input format
+
+12. Make and display prediction:
+
+Use trained model to predict class
+
+Output the predicted result (0 or 1) . The logistic regression model outputs a predicted class of 0 or 1 because it is designed for binary classification tasks, where the target variable has only two possible outcomes.
