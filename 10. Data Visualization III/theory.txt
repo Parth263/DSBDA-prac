@@ -1,63 +1,555 @@
-Data Visualization III
-Download the Iris flower dataset or any other dataset into a DataFrame. (e.g.,
-https://archive.ics.uci.edu/ml/datasets/Iris ). Scan the dataset and give the inference as:
-1. List down the features and their types (e.g., numeric, nominal) available in the dataset.
-2. Create a histogram for each feature in the dataset to illustrate the feature distributions.
-3. Create a box plot for each feature in the dataset.
-4. Compare distributions and identify outliers.
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-IN CODE :-
-* import numpy as np
-  Purpose: Fundamental library for numerical computations in Python.
-* import pandas as pd
-  Purpose: Powerful data analysis and data manipulation tool.
-* np.unique(df["col5"]) -  returns all the unique values in the column col5 of a DataFrame df, using NumPy.
-*%matplotlib inline is a magic command used in Jupyter Notebooks to display matplotlib plots directly below the code cell that produces them.
-* fig, axes = plt.subplots(2, 2, figsize=(16, 8)) - The line fig, axes = plt.subplots(2, 2, figsize=(16, 8)) is used in Matplotlib to create a grid of subplots—in this case, a 2x2 grid (4 plots).
+Below is a comprehensive response for **Data Visualization III: Practical** based on the provided `10Data_Visualization3.ipynb` notebook and the `iris-flower.csv` dataset. The response will cover:
 
-* data_to_plot = [df["col1"], df["col2"], df["col3"], df["col4"]]:
-Creates a list containing four columns (col1, col2, col3, col4) from the DataFrame df. These columns will be used as the data for the boxplot.
+1. **What's Going On in This Practical and Its Goals/Problem Statement**
+2. **Concepts and Foundations Behind the Practical**
+3. **Explanation of Code Blocks in Easy Language**
+4. **Detailed Response to the Query Requirements**
+5. **Conclusion: Is the Practical Right or Wrong?**
 
-* sns.set_style("whitegrid"):
-Sets the Seaborn style for the plot to "whitegrid", which adds a white background with gridlines, making the plot easier to read.
+---
 
-*fig = plt.figure(1, figsize=(12,8)):
-Creates a figure instance with the given ID (1) and specifies the size of the figure (12x8 inches). This is the overall canvas where all subplots will be drawn.
+### 1. What's Going On in This Practical and Its Goals/Problem Statement
 
-*ax = fig.add_subplot(111):
-Adds a single subplot to the figure (111 indicates 1 row, 1 column, and the 1st subplot). This is where the boxplot will be drawn.
+#### What's Going On
+The `10Data_Visualization3.ipynb` notebook is designed to perform **Exploratory Data Analysis (EDA)** on the **Iris flower dataset**, a classic dataset in machine learning and data science. The practical involves:
 
-*bp = ax.boxplot(data_to_plot):
-Creates the boxplot on the axes ax using the data in data_to_plot (the four columns in the DataFrame). 
-A boxplot displays the distribution of a dataset based on the minimum, first quartile (Q1), median, third quartile (Q3), and maximum.
+- **Loading the Dataset**: Reading the Iris dataset (`data10.csv`, which corresponds to `iris-flower.csv`) into a Pandas DataFrame and renaming its columns to `col1`, `col2`, `col3`, `col4`, and `col5`.
+- **Analyzing Features**: Listing the features and their data types (numeric or categorical).
+- **Summary Statistics**: Computing basic statistics (e.g., mean, standard deviation, min, max) for numeric features.
+- **Data Visualization**:
+  - Creating a box plot for `col3` (petal length) vs. `col4` (petal width), though the query requires box plots and histograms for **each feature**.
+- **Incomplete Implementation**: The notebook only partially addresses the query requirements, as it lacks histograms for each feature, box plots for each feature, and a comparison of distributions with outlier identification.
+
+The practical is part of a series of data visualization exercises, building on previous practicals (e.g., histograms in Practical 8, box plots in Practical 9). It focuses on using visualizations to understand the distribution of features in the Iris dataset and identifying patterns or outliers.
+
+#### Goals/Problem Statement
+The specific goals of this practical, as outlined in the query, are:
+1. **List Features and Their Types**:
+   - Identify the features in the Iris dataset and classify them as numeric (e.g., float) or nominal (e.g., categorical).
+2. **Create Histograms for Each Feature**:
+   - Plot histograms for each numeric feature to illustrate their distributions (e.g., how values are spread across ranges).
+3. **Create Box Plots for Each Feature**:
+   - Plot box plots for each numeric feature to show central tendency, spread, and outliers.
+4. **Compare Distributions and Identify Outliers**:
+   - Analyze the histograms and box plots to compare feature distributions across the dataset and identify any outliers (unusual values).
+
+**Problem Statement**: Download the Iris flower dataset, load it into a Pandas DataFrame, and perform EDA by:
+- Listing the features and their types.
+- Creating histograms and box plots for each feature to visualize their distributions.
+- Comparing the distributions and identifying outliers to understand the dataset's characteristics.
+
+**What's Happening in the Notebook**:
+- The notebook loads the Iris dataset and renames its columns to generic names (`col1` to `col5`).
+- It uses `df.info()` and `np.unique()` to inspect feature types and unique values in `col5` (species).
+- It computes summary statistics for numeric features using `df.describe()`.
+- It creates a single box plot for `col3` (petal length) vs. `col4` (petal width), which does not fully meet the requirement to create box plots for each feature.
+- It does not include histograms or a comparison of distributions and outliers, making it incomplete.
+
+#### Additional Notes
+- The Iris dataset is well-known, with 150 samples of three species (Iris-setosa, Iris-versicolor, Iris-virginica), each described by four numeric features (sepal length, sepal width, petal length, petal width) and one categorical feature (species).
+- The notebook's implementation is incomplete, as it only partially addresses the visualization requirements and lacks the requested analysis of distributions and outliers.
+- The box plot created (`col3` vs. `col4`) is incorrect for the query, as it plots one feature against another rather than showing distributions for each feature individually.
+
+---
+
+### 2. Concepts and Foundations Behind the Practical
+
+#### Concepts of Data Visualization
+This practical focuses on **Exploratory Data Analysis (EDA)** through visualizations, specifically histograms and box plots, to understand the Iris dataset's structure. Key concepts include:
+
+1. **Exploratory Data Analysis (EDA)**:
+   - **Definition**: EDA involves analyzing datasets to summarize their main characteristics, often using statistical graphics (e.g., histograms, box plots).
+   - **Purpose**: To explore data distributions, detect patterns, identify outliers, and generate hypotheses for further analysis.
+   - **In This Practical**: EDA is used to understand the distribution of sepal and petal measurements across Iris species and to identify any unusual values.
+
+2. **Histogram**:
+   - **Definition**: A histogram is a plot that shows the frequency distribution of a numeric variable by dividing the data into bins and counting the number of occurrences in each bin.
+   - **Purpose**: To visualize the shape of the distribution (e.g., normal, skewed, multimodal) and identify patterns or anomalies.
+   - **In This Practical**: Histograms are required for each numeric feature (sepal length, sepal width, petal length, petal width) to show how values are distributed (e.g., are petal lengths clustered or spread out?).
+
+3. **Box Plot (Box-and-Whisker Plot)**:
+   - **Definition**: A box plot summarizes a numeric variable’s distribution using five statistics:
+     - **Minimum**: Smallest value within 1.5 * IQR (interquartile range) from Q1.
+     - **First Quartile (Q1)**: 25th percentile.
+     - **Median (Q2)**: 50th percentile.
+     - **Third Quartile (Q3)**: 75th percentile.
+     - **Maximum**: Largest value within 1.5 * IQR from Q3.
+     - **Outliers**: Values outside the whiskers (beyond 1.5 * IQR from Q1 or Q3), plotted as dots.
+   - **Purpose**: To show central tendency, spread, skewness, and outliers in a compact way.
+   - **In This Practical**: Box plots are required for each numeric feature to visualize their distributions and identify outliers (e.g., unusually large or small petal widths).
+
+4. **Feature Types**:
+   - **Numeric (Continuous)**: Variables with measurable values (e.g., sepal length in cm, float type).
+   - **Nominal (Categorical)**: Variables representing categories without order (e.g., species: setosa, versicolor, virginica).
+   - **In This Practical**: The Iris dataset has four numeric features (sepal length, sepal width, petal length, petal width) and one nominal feature (species).
+
+5. **Outliers**:
+   - **Definition**: Data points that deviate significantly from the rest of the data, often identified in box plots as points outside the whiskers.
+   - **Purpose**: Identifying outliers helps detect data errors, anomalies, or significant variations that may require further investigation.
+   - **In This Practical**: Outliers in sepal or petal measurements could indicate measurement errors or natural variation in certain Iris species.
+
+6. **Iris Dataset**:
+   - **Description**: Contains 150 samples of three Iris species (50 each of setosa, versicolor, virginica), with:
+     - **Numeric Features**:
+       - Sepal length (cm)
+       - Sepal width (cm)
+       - Petal length (cm)
+       - Petal width (cm)
+     - **Categorical Feature**: Species (Iris-setosa, Iris-versicolor, Iris-virginica)
+   - **Purpose**: A benchmark dataset for classification and EDA due to its simplicity and well-separated classes.
+   - **In This Practical**: Used to explore feature distributions and identify patterns or outliers.
+
+7. **Python Libraries**:
+   - **Pandas**: Manages tabular data (DataFrames) for loading, renaming columns, and computing statistics.
+   - **NumPy**: Supports numerical operations and array manipulations (e.g., finding unique values).
+   - **Seaborn**: Creates statistical visualizations (e.g., box plots, histograms) with simple syntax.
+   - **Matplotlib**: Renders plots and customizes visualizations, used as Seaborn’s backend.
+   - **In This Practical**: These libraries are used to load the dataset, analyze features, and create visualizations (though only a box plot is implemented).
 
 
 
-Importance of Data Visualizations in EDA
-Exploratory Data Analysis (EDA) is an essential step in the data science process. By visualizing data, we can:
 
-1.  Identify patterns and trends in the dataset.
-2.  Detect outliers and anomalies.
-3.  Understand the distribution of numerical features.
-4.  Evaluate relationships between variables.
-5.  Gain insights before applying machine learning models.
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-ALGORITHM :-
-1. Import Required Libraries
-2. Load the Dataset
-3. View Initial Rows
-Get a quick look at the dataset structure using head().
-4. Check the Number of Columns
-Determine how many columns are present in the dataset.
-5. Explore Class Labels
-Check unique values in categorical columns to understand class distribution.
-6. Analyze Attributes
-Compute basic statistical measures for numerical features:
-7. Visualize Feature Distributions with Histograms
-Create histograms for all numerical columns to analyze distribution shapes.
-8. Box Plot for Each Feature
-Box plots provide a compact summary of data spread, skewness, and outliers.
-9. Outlier Detection Using IQR
-Use statistical techniques (IQR method) to identify rows with outlier values.
-10. Pair Plot for Class-wise Comparison
-Pair plots visualize relationships between features, colored by class labels.
+
+
+
+
+#### Foundations/Theoretical Background
+1. **Why Use Histograms and Box Plots?**
+   - **Histograms**: Reveal the shape of the distribution (e.g., normal, skewed, bimodal), which is critical for understanding feature behavior. For example, petal length may show distinct clusters for different species.
+   - **Box Plots**: Provide a compact summary of distribution (median, IQR, outliers), making it easy to compare features and detect anomalies. For example, a box plot of sepal width may show outliers indicating unusual flower measurements.
+   - **Comparison**: Histograms show the full distribution, while box plots highlight summary statistics and outliers, complementing each other in EDA.
+
+2. **Distribution Analysis**:
+   - **Central Tendency**: Measured by the median (box plot) or mean (statistics), indicating the typical value.
+   - **Spread**: Measured by IQR (box plot) or standard deviation (statistics), showing variability.
+   - **Skewness**: Indicated by asymmetric whiskers (box plot) or histogram shape, showing if data is skewed left or right.
+   - **Multimodality**: Histograms may reveal multiple peaks (e.g., petal length may have peaks for each species).
+   - **In This Practical**: Comparing distributions helps understand how features vary across species and whether certain features (e.g., petal length) are more discriminative.
+
+3. **Outlier Detection**:
+   - **Theory**: Outliers are values beyond 1.5 * IQR from Q1 or Q3, often indicating errors, extreme cases, or natural variation.
+   - **Importance**: In the Iris dataset, outliers may reflect rare flower measurements or data entry errors, impacting classification models.
+   - **In This Practical**: Box plots are used to identify outliers in each feature, and their comparison helps assess their significance.
+
+4. **Statistical Insights**:
+   - **Summary Statistics**: Mean, standard deviation, min, max, and quartiles provide a numerical overview of each feature.
+   - **Visualization**: Histograms and box plots translate these statistics into visual insights, making patterns and anomalies easier to interpret.
+   - **In This Practical**: Statistics and visualizations together help compare features and understand their roles in distinguishing Iris species.
+
+#### Why This Practical Matters
+- **Learning Objective**: Teaches students to perform EDA using histograms and box plots, interpret feature distributions, and identify outliers, which are foundational skills in data science.
+- **Real-World Application**: Understanding feature distributions in the Iris dataset is relevant for classification tasks (e.g., predicting species) and generalizes to other datasets in biology, finance, or social sciences.
+- **Skill Development**: Builds proficiency in Pandas, NumPy, Seaborn, and Matplotlib, and emphasizes the importance of combining numerical and visual analysis.
+
+---
+
+
+
+
+
+
+
+### 3. Explanation of Code Blocks in Easy Language
+
+The `10Data_Visualization3.ipynb` notebook contains several code blocks for loading, analyzing, and visualizing the Iris dataset. Below, I explain each code block in simple language, noting that the notebook is incomplete for the query requirements.
+
+#### Code Block 1: Importing Libraries
+```python
+import numpy as np
+import pandas as pd
+```
+- **What It Does**:
+  - **Imports Libraries**:
+    - `numpy` (as `np`): Handles numerical operations (e.g., finding unique values).
+    - `pandas` (as `pd`): Loads and manages the Iris dataset as a DataFrame.
+- **Why It’s Important**:
+  - Sets up the tools needed to load and analyze the dataset.
+- **Output**: None (just imports libraries).
+
+#### Code Block 2: Loading the Dataset and Renaming Columns
+```python
+df = pd.read_csv("data10.csv")
+df.columns = ["col1", "col2", "col3", "col4", "col5"]
+```
+- **What It Does**:
+  - **Loads Dataset**: Reads `data10.csv` (Iris dataset) into a Pandas DataFrame called `df`.
+  - **Renames Columns**: Assigns generic names (`col1` to `col5`) to the columns, which correspond to:
+    - `col1`: Sepal length (cm, numeric)
+    - `col2`: Sepal width (cm, numeric)
+    - `col3`: Petal length (cm, numeric)
+    - `col4`: Petal width (cm, numeric)
+    - `col5`: Species (categorical: Iris-setosa, Iris-versicolor, Iris-virginica)
+- **Why It’s Important**:
+  - Loads the data for analysis.
+  - Renaming columns makes them easier to reference, though generic names are less descriptive than the actual feature names.
+- **Output**: None (creates DataFrame `df`).
+
+#### Code Block 3: Displaying First 5 Rows
+```python
+df.head()
+```
+- **What It Does**:
+  - Shows the first 5 rows of the DataFrame to preview the data.
+- **Why It’s Important**:
+  - Helps verify that the dataset loaded correctly and shows the structure (columns and sample values).
+- **Output**:
+  - A table with 5 rows and 5 columns:
+    ```
+       col1  col2  col3  col4         col5
+    0   5.1   3.5   1.4   0.2  Iris-setosa
+    1   4.9   3.0   1.4   0.2  Iris-setosa
+    2   4.7   3.2   1.3   0.2  Iris-setosa
+    3   4.6   3.1   1.5   0.2  Iris-setosa
+    4   5.0   3.6   1.4   0.2  Iris-setosa
+    ```
+  - Shows numeric values for `col1` to `col4` and categorical values for `col5` (all Iris-setosa in this sample).
+
+#### Code Block 4: Counting Columns
+```python
+column = len(list(df))
+column
+```
+- **What It Does**:
+  - Counts the number of columns in the DataFrame by converting `df` to a list of column names and getting its length.
+- **Why It’s Important**:
+  - Confirms the dataset has 5 columns, useful for understanding its structure.
+- **Output**: `5` (indicating 5 columns: `col1`, `col2`, `col3`, `col4`, `col5`).
+
+#### Markdown: Task 1 - List Features and Their Types
+```markdown
+1.List down the features and their types (e.g., numeric, nominal) available in the dataset.
+```
+- **What It Says**:
+  - Introduces the first task: identifying the features and their data types.
+
+#### Code Block 5: Inspecting Feature Types
+```python
+df.info()
+```
+- **What It Does**:
+  - Displays information about the DataFrame, including:
+    - Number of rows (150).
+    - Column names, non-null counts, and data types.
+- **Why It’s Important**:
+  - Helps identify feature types:
+    - `col1`, `col2`, `col3`, `col4`: `float64` (numeric, continuous).
+    - `col5`: `object` (categorical, nominal).
+  - Confirms no missing values (150 non-null for all columns).
+- **Output**:
+  ```
+  <class 'pandas.core.frame.DataFrame'>
+  RangeIndex: 150 entries, 0 to 149
+  Data columns (total 5 columns):
+   #   Column  Non-Null Count  Dtype  
+  ---  ------  --------------  -----  
+   0   col1    150 non-null    float64
+   1   col2    150 non-null    float64
+   2   col3    150 non-null    float64
+   3   col4    150 non-null    float64
+   4   col5    150 non-null    object 
+  dtypes: float64(4), object(1)
+  memory usage: 6.0+ KB
+  ```
+
+#### Markdown: Conclusion on Feature Types
+```markdown
+Hence the dataset contains 4 numerical columns and 1 object column
+```
+- **What It Says**:
+  - Summarizes that there are 4 numeric columns (`col1` to `col4`) and 1 categorical column (`col5`).
+- **Accuracy**: Correct, as `col1` to `col4` are `float64` (numeric) and `col5` is `object` (categorical).
+
+#### Code Block 6: Unique Values in `col5`
+```python
+np.unique(df["col5"])
+```
+- **What It Does**:
+  - Finds unique values in the `col5` column (species) using NumPy’s `unique` function.
+- **Why It’s Important**:
+  - Confirms the categories in the categorical feature (`col5`):
+    - `Iris-setosa`, `Iris-versicolor`, `Iris-virginica`.
+  - Helps understand the classification task (three species).
+- **Output**:
+  ```
+  array(['Iris-setosa', 'Iris-versicolor', 'Iris-virginica'], dtype=object)
+  ```
+
+#### Code Block 7: Summary Statistics
+```python
+df.describe()
+```
+- **What It Does**:
+  - Computes summary statistics for numeric columns (`col1` to `col4`), including:
+    - Count, mean, standard deviation, min, 25th percentile (Q1), median (50%), 75th percentile (Q3), max.
+- **Why It’s Important**:
+  - Provides a numerical overview of the distribution of each numeric feature, useful for understanding central tendency, spread, and range.
+- **Output**:
+  ```
+             col1        col2        col3        col4
+  count  150.000000  150.000000  150.000000  150.000000
+  mean     5.843333    3.054000    3.758667    1.198667
+  std      0.828066    0.433594    1.764420    0.763161
+  min      4.300000    2.000000    1.000000    0.100000
+  25%      5.100000    2.800000    1.600000    0.300000
+  50%      5.800000    3.000000    4.350000    1.300000
+  75%      6.400000    3.300000    5.100000    1.800000
+  max      7.900000    4.400000    6.900000    2.500000
+  ```
+  - **Interpretation**:
+    - `col1` (sepal length): Mean ~5.84 cm, range 4.3-7.9 cm.
+    - `col2` (sepal width): Mean ~3.05 cm, range 2.0-4.4 cm.
+    - `col3` (petal length): Mean ~3.76 cm, range 1.0-6.9 cm, higher variability (std ~1.76).
+    - `col4` (petal width): Mean ~1.20 cm, range 0.1-2.5 cm.
+
+
+
+
+
+#### Markdown: Task 2 - Summary Statistics
+```markdown
+Compute and display summary statistics for each feature available in the dataset.
+```
+- **What It Says**:
+  - Introduces the task of computing summary statistics, fulfilled by the `df.describe()` output.
+
+#### Code Block 8: Importing Visualization Libraries
+```python
+import seaborn as sns
+import matplotlib
+import matplotlib.pyplot as plt
+%matplotlib inline
+```
+- **What It Does**:
+  - **Imports Libraries**:
+    - `seaborn` (as `sns`): For creating statistical visualizations (e.g., box plots, histograms).
+    - `matplotlib` and `matplotlib.pyplot` (as `plt`): For rendering plots.
+  - **Sets Inline Display**: `%matplotlib inline` ensures plots display directly in the notebook (relevant for Jupyter/Colab).
+- **Why It’s Important**:
+  - Prepares the environment for creating visualizations (histograms and box plots).
+- **Output**: None (just imports libraries).
+
+#### Markdown: Task 3 - Data Visualization
+```markdown
+Data Visualization-Create a histogram for each feature in the dataset to illustrate the feature distributions. Plot each histogram.
+```
+- **What It Says**:
+  - Introduces the task of creating histograms for each feature, but this task is **not implemented** in the notebook.
+
+#### Code Block 9: Box Plot (Incorrect Implementation)
+```python
+sns.boxplot(x='col3', y='col4', data=df)
+```
+- **What It Does**:
+  - Creates a box plot using Seaborn’s `boxplot` function.
+  - **Parameters**:
+    - `x='col3'`: Petal length (numeric) on the x-axis.
+    - `y='col4'`: Petal width (numeric) on the y-axis.
+    - `data=df`: Uses the Iris DataFrame.
+  - Shows the distribution of `col4` (petal width) for different values of `col3` (petal length).
+- **Why It’s Important**:
+  - Attempts to visualize data, but it’s **incorrect** for the query:
+    - The query requires box plots for **each feature** individually (e.g., one box plot for sepal length, one for sepal width, etc.).
+    - This plots one numeric feature (`col4`) against another (`col3`), which is not the intended task.
+- **Output**:
+  - A box plot showing petal width distributions for discrete values of petal length.
+  - **Issue**: This visualization is misleading because `col3` (petal length) is continuous, not categorical, and the query asks for individual feature distributions, not pairwise relationships.
+
+---
+
+### 4. Detailed Response to the Query Requirements
+
+Since the notebook only partially addresses the query, I’ll provide a complete response based on the Iris dataset, including the missing components (histograms, correct box plots, and distribution comparison). I’ll use the notebook’s outputs where applicable and supplement with additional analysis.
+
+#### 1. List Down the Features and Their Types
+**Features and Types**:
+- **col1 (Sepal Length)**: Numeric (continuous, `float64`), measured in cm.
+- **col2 (Sepal Width)**: Numeric (continuous, `float64`), measured in cm.
+- **col3 (Petal Length)**: Numeric (continuous, `float64`), measured in cm.
+- **col4 (Petal Width)**: Numeric (continuous, `float64`), measured in cm.
+- **col5 (Species)**: Nominal (categorical, `object`), with three categories: `Iris-setosa`, `Iris-versicolor`, `Iris-virginica`.
+
+**Source**:
+- From `df.info()` (Code Block 5):
+  - `col1`, `col2`, `col3`, `col4`: `float64` (numeric).
+  - `col5`: `object` (categorical).
+- From `np.unique(df["col5"])` (Code Block 6):
+  - `col5` has three unique values, confirming it’s nominal.
+
+**Additional Notes**:
+- The Iris dataset has no missing values (150 non-null for all columns), making analysis straightforward.
+- The numeric features are measurements, suitable for histograms and box plots, while the categorical feature (species) is typically used for grouping or classification, not visualization in this context.
+
+#### 2. Create a Histogram for Each Feature
+The notebook does **not** include histograms, but I’ll describe how to create them and provide insights based on the Iris dataset’s characteristics.
+
+**Code to Create Histograms**:
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Create a figure with subplots for each numeric feature
+fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+fig.suptitle('Histograms of Iris Dataset Features')
+
+# Plot histograms
+sns.histplot(df['col1'], ax=axes[0, 0], kde=True)
+axes[0, 0].set_title('Sepal Length (col1)')
+axes[0, 0].set_xlabel('cm')
+
+sns.histplot(df['col2'], ax=axes[0, 1], kde=True)
+axes[0, 1].set_title('Sepal Width (col2)')
+axes[0, 1].set_xlabel('cm')
+
+sns.histplot(df['col3'], ax=axes[1, 0], kde=True)
+axes[1, 0].set_title('Petal Length (col3)')
+axes[1, 0].set_xlabel('cm')
+
+sns.histplot(df['col4'], ax=axes[1, 1], kde=True)
+axes[1, 1].set_title('Petal Width (col4)')
+axes[1, 1].set_xlabel('cm')
+
+plt.tight_layout()
+plt.show()
+```
+
+**Expected Output**:
+- Four histograms, one for each numeric feature (`col1`, `col2`, `col3`, `col4`), showing the frequency of values in bins.
+- **KDE (Kernel Density Estimate)**: Adds a smooth curve to estimate the distribution shape.
+
+**Observations** (based on Iris dataset):
+- **Sepal Length (col1)**:
+  - Range: 4.3–7.9 cm (from `df.describe()`).
+  - Distribution: Roughly normal, with a peak around 5.0–6.0 cm.
+  - Shape: Slightly right-skewed, with more values around 5.0–5.5 cm.
+- **Sepal Width (col2)**:
+  - Range: 2.0–4.4 cm.
+  - Distribution: Approximately normal, centered around 3.0 cm (median ~3.0).
+  - Shape: Symmetric, with a single peak, indicating consistent sepal widths.
+- **Petal Length (col3)**:
+  - Range: 1.0–6.9 cm.
+  - Distribution: Bimodal, with two distinct peaks:
+    - One around 1.0–2.0 cm (likely Iris-setosa, which has smaller petals).
+    - Another around 4.0–5.5 cm (versicolor and virginica).
+  - Shape: Reflects species differences, with a gap around 2.0–3.0 cm.
+- **Petal Width (col4)**:
+  - Range: 0.1–2.5 cm.
+  - Distribution: Bimodal, with peaks around:
+    - 0.1–0.5 cm (Iris-setosa).
+    - 1.0–2.0 cm (versicolor and virginica).
+  - Shape: Similar to petal length, showing species-specific clusters.
+
+**Insights**:
+- Petal measurements (`col3`, `col4`) show clear separation between species, making them useful for classification.
+- Sepal measurements (`col1`, `col2`) are more overlapping, with normal-like distributions.
+- Bimodal distributions in petal measurements suggest species differences, which histograms reveal effectively.
+
+#### 3. Create a Box Plot for Each Feature
+The notebook’s box plot (`sns.boxplot(x='col3', y='col4', data=df)`) is incorrect, as it plots petal length vs. petal width instead of individual feature distributions. I’ll provide the correct approach and analyze the results.
+
+**Code to Create Box Plots**:
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Create a figure with subplots for each numeric feature
+fig, axes = plt.subplots(1, 4, figsize=(12, 5))
+fig.suptitle('Box Plots of Iris Dataset Features')
+
+# Plot box plots
+sns.boxplot(y=df['col1'], ax=axes[0])
+axes[0].set_title('Sepal Length (col1)')
+axes[0].set_ylabel('cm')
+
+sns.boxplot(y=df['col2'], ax=axes[1])
+axes[1].set_title('Sepal Width (col2)')
+axes[1].set_ylabel('cm')
+
+sns.boxplot(y=df['col3'], ax=axes[2])
+axes[2].set_title('Petal Length (col3)')
+axes[2].set_ylabel('cm')
+
+sns.boxplot(y=df['col4'], ax=axes[3])
+axes[3].set_title('Petal Width (col4)')
+axes[3].set_ylabel('cm')
+
+plt.tight_layout()
+plt.show()
+```
+
+**Expected Output**:
+- Four box plots, one for each numeric feature, showing:
+  - Median (central line).
+  - IQR (box, from Q1 to Q3).
+  - Whiskers (extending to min/max within 1.5 * IQR).
+  - Outliers (dots beyond whiskers).
+
+**Observations** (based on `df.describe()` and Iris dataset):
+- **Sepal Length (col1)**:
+  - Median: ~5.8 cm.
+  - IQR: ~5.1–6.4 cm.
+  - Whiskers: ~4.3–7.9 cm (approximate, based on min/max).
+  - Outliers: Likely none or minimal, as the range (4.3–7.9 cm) is compact and standard deviation (0.83) is low.
+  - Distribution: Fairly symmetric, with a slight right skew (max 7.9 cm is farther from median than min 4.3 cm).
+- **Sepal Width (col2)**:
+  - Median: ~3.0 cm.
+  - IQR: ~2.8–3.3 cm.
+  - Whiskers: ~2.0–4.0 cm (approximate).
+  - Outliers: A few potential outliers (e.g., values >4.0 cm or <2.3 cm), as the range (2.0–4.4 cm) includes extremes and std (0.43) is moderate.
+  - Distribution: Symmetric, with a narrow IQR indicating low variability.
+- **Petal Length (col3)**:
+  - Median: ~4.35 cm.
+  - IQR: ~1.6–5.1 cm.
+  - Whiskers: ~1.0–6.9 cm (approximate).
+  - Outliers: Likely none, as the range (1.0–6.9 cm) aligns with species differences (setosa has small petals, versicolor/virginica larger).
+  - Distribution: Bimodal (from histogram), but the box plot shows a wide IQR due to species variation.
+- **Petal Width (col4)**:
+  - Median: ~1.3 cm.
+  - IQR: ~0.3–1.8 cm.
+  - Whiskers: ~0.1–2.5 cm (approximate).
+  - Outliers: Likely none or minimal, as the range (0.1–2.5 cm) reflects species differences.
+  - Distribution: Bimodal (from histogram), with a wide IQR due to setosa’s small petal widths vs. versicolor/virginica.
+
+**Insights**:
+- Box plots confirm the spread and central tendency from `df.describe()`.
+- Sepal width (`col2`) may have a few outliers (e.g., unusually large or small widths), while other features have few or none.
+- Petal measurements (`col3`, `col4`) show wider IQRs due to species differences, which box plots capture as spread rather than outliers.
+
+#### 4. Compare Distributions and Identify Outliers
+**Comparison of Distributions**:
+- **Sepal Length (col1)**:
+  - **Histogram**: Normal-like, slightly right-skewed, peak around 5.0–6.0 cm.
+  - **Box Plot**: Symmetric, median ~5.8 cm, narrow IQR (~5.1–6.4 cm), no significant outliers.
+  - **Insight**: Consistent across species, with moderate variability (std ~0.83). Less discriminative for classification due to overlap.
+- **Sepal Width (col2)**:
+  - **Histogram**: Normal, symmetric, peak around 3.0 cm.
+  - **Box Plot**: Symmetric, median ~3.0 cm, narrow IQR (~2.8–3.3 cm), possible outliers at extremes (e.g., >4.0 cm or <2.3 cm).
+  - **Insight**: Least variable feature (std ~0.43), but outliers suggest some flowers have unusual widths. Overlapping across species.
+- **Petal Length (col3)**:
+  - **Histogram**: Bimodal, with peaks at 1.0–2.0 cm (setosa) and 4.0–5.5 cm (versicolor/virginica).
+  - **Box Plot**: Wide IQR (~1.6–5.1 cm), median ~4.35 cm, no outliers (extremes are species-driven).
+  - **Insight**: Highly discriminative due to clear separation (setosa has small petals, others larger). High variability (std ~1.76).
+- **Petal Width (col4)**:
+  - **Histogram**: Bimodal, with peaks at 0.1–0.5 cm (setosa) and 1.0–2.0 cm (versicolor/virginica).
+  - **Box Plot**: Wide IQR (~0.3–1.8 cm), median ~1.3 cm, minimal outliers.
+  - **Insight**: Similar to petal length, highly discriminative due to species separation. Moderate variability (std ~0.76).
+
+**Outlier Identification**:
+- **Sepal Length (col1)**: No significant outliers (range 4.3–7.9 cm is within 1.5 * IQR from Q1/Q3).
+- **Sepal Width (col2)**: Potential outliers at extremes (e.g., >4.0 cm or <2.3 cm), as values like 4.4 cm or 2.0 cm are rare. These may reflect natural variation or measurement anomalies.
+- **Petal Length (col3)**: No outliers, as the wide range (1.0–6.9 cm) is due to species differences, not anomalies.
+- **Petal Width (col4)**: Minimal outliers, as the range (0.1–2.5 cm) aligns with species characteristics.
+
+**Key Insights**:
+- **Petal Measurements (`col3`, `col4`)**:
+  - Bimodal distributions reflect species differences (setosa has smaller petals, versicolor/virginica larger).
+  - Wide IQRs in box plots but no outliers, as extremes are species-driven.
+  - Highly discriminative for classification tasks.
+- **Sepal Measurements (`col1`, `col2`)**:
+  - Normal-like distributions with overlap across species.
+  - Sepal width has a few outliers, indicating rare measurements.
+  - Less discriminative due to overlap.
+- **Outliers**: Primarily in sepal width, but minimal overall, suggesting the Iris dataset is clean and well-structured.
+- **Species Influence**: Petal measurements show clear separation, explaining why they are key features in Iris classification models.
+
+---
+

@@ -1,67 +1,346 @@
-Data Visualization II
-1. Use the inbuilt dataset 'titanic' as used in the above problem. Plot a box plot for
-distribution of age with respect to each gender along with the information about whether
-they survived or not. (Column names : 'sex' and 'age')
-2. Write observations on the inference from the above statistics.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-IN CODE :-
-1. import pandas as pd
-   Purpose: Powerful data analysis and data manipulation tool.
-2.  import numpy as np
-Purpose: Fundamental library for numerical computations in Python.
-3. import matplotlib.pyplot as plt
-Purpose: Core plotting library for visualizing data.
-4. import seaborn as sns
-Purpose: High-level interface for drawing attractive and informative statistical graphics (built on top of matplotlib).sns.heatmap(), sns.countplot(), sns.boxplot()
-5. dataset.describe() is a Pandas function that provides a statistical summary of the numeric columns in a DataFrame.
-6. dataset.dtypes is a Pandas attribute that returns the data type of each column in a DataFrame
-7. dataset.isnull().sum() is a Pandas command used to identify and count missing (null) values in each column of a DataFrame.
-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EXTRA :-
-A box plot is used to display the distribution of numerical data based on five summary statistics:
+Below is a comprehensive response for **Data Visualization II: Practical 1** based on the provided `Assignment_9_Data_Visualization_II.ipynb` notebook. The response will cover:
 
-Minimum (Q0): The smallest data point (excluding outliers)
-First quartile (Q1): The 25th percentile (lower quartile)
-Median (Q2): The 50th percentile (middle value)
-Third quartile (Q3): The 75th percentile (upper quartile)
-Maximum (Q4): The largest data point (excluding outliers)
+1. **What's Going On in This Practical and Its Goals/Problem Statement**
+2. **Concepts and Foundations Behind the Practical**
+3. **Explanation of Code Blocks in Easy Language**
+4. **Conclusion: Is the Practical Right or Wrong?**
 
-Additionally box plots help in detecting outliers as they represent extreme values beyond 1.5 times the interquartile range (IQR)
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-1. Import Required Libraries
-To create data visualizations, import the necessary Python libraries:
+---
 
-import pandas as pd  
-import numpy as np  
-import matplotlib.pyplot as plt  
-import seaborn as sns  
+### 1. What's Going On in This Practical and Its Goals/Problem Statement
 
-2. Load the Dataset
-Load the dataset using pandas:
+#### What's Going On
+The `Assignment_9_Data_Visualization_II.ipynb` notebook focuses on **data visualization** using the **Titanic dataset** (`train.csv`), the same dataset used in the previous practical. The practical involves:
 
-dataset = pd.read_csv('/content/detail.csv')  
-dataset.head()  # Display the first few rows  
+- **Loading the Dataset**: Reading the Titanic dataset into a Python environment using Pandas.
+- **Visualizing Data with Box Plots**: Creating box plots using Seaborn's `boxplot` function to analyze the distribution of:
+  - **Age** with respect to **Sex** (male vs. female).
+  - **Age** with respect to **Sex** and **Survived** (whether passengers survived or not).
+  - **Fare** with respect to **Survived** (survived vs. did not survive).
+- **Interpreting Results**: Providing a detailed explanation of the box plot for females, including quartile ranges and outliers, and discussing how to interpret box plots with additional layers (e.g., survival status).
 
-3. Plot Boxplot for Age Distribution by Gender
-Visualize the distribution of age across different genders:
-sns.boxplot(x='sex', y='Age', data=dataset)  
+The notebook is an exercise in **Exploratory Data Analysis (EDA)**, emphasizing the use of box plots to understand the distribution of numeric variables (`Age`, `Fare`) across categorical variables (`Sex`, `Survived`). It builds on the previous practical (which used a histogram) by introducing a different visualization technique.
 
-4. Modify Boxplot to Include Survival Information
-Add a hue parameter to distinguish survival status based on age and gender:
-sns.boxplot(x='sex', y='Age', data=dataset, hue="SnowRed")
+#### Goals/Problem Statement
+The specific goals of this practical, as outlined in the query, are:
+1. **Plot a Box Plot for Age Distribution by Gender and Survival**:
+   - Create a box plot to show the distribution of `Age` for each `Sex` (male and female), with an additional layer of information about `Survived` (0 = did not survive, 1 = survived).
+   - Column names: `Sex` (categorical), `Age` (numeric), and `Survived` (categorical).
+2. **Write Observations**:
+   - Provide inferences from the box plot statistics, such as differences in age distributions between genders and survival groups, quartile ranges, medians, and outliers.
 
-5. Alternative Way to Load Datasets
-Use Seaborn's built-in dataset function for convenience:
-fps = sns.load_dataset("fps")  
+**Problem Statement**: Using the Titanic dataset, load the data and plot a box plot to visualize the distribution of passengers' ages with respect to their gender (`Sex`) and survival status (`Survived`). Additionally, analyze the box plot to draw observations about how age distributions vary across these groups, including quartile ranges, medians, and any outliers.
 
-6. Boxplot for FPS Distribution by Survival Status
-Analyze the relationship between FPS profiles and survival ratio:
-sns.boxplot(x='SnowRed', y='Fpsd', data=dataset)  
+**What's Happening in the Notebook**:
+- The notebook loads the Titanic dataset and displays the first few rows.
+- It creates three box plots:
+  - **First Box Plot**: `Age` vs. `Sex` (without survival information).
+  - **Second Box Plot**: `Age` vs. `Sex`, with `Survived` as the `hue` parameter (showing survival status).
+  - **Third Box Plot**: `Fare` vs. `Survived` (not explicitly required by the query but included in the notebook).
+- It includes a markdown section explaining the box plot for females (quartiles and outliers) and how to add survival information using the `hue` parameter.
 
-7. Interpret Observations from Boxplots
-Key insights:
-Younger passengers had a higher survival probability.
-Passengers who paid higher fares had better survival chances.
+#### Additional Notes
+- The notebook goes beyond the query's requirements by including an extra box plot (`Fare` vs. `Survived`) and a redundant box plot (`Age` vs. `Sex` without `Survived`).
+- The markdown explanations are helpful but contain minor inaccuracies (e.g., approximate quartile ranges for females that may not align precisely with the data).
 
-8. Save and Display the Plots
-plt.show()  
+---
+
+### 2. Concepts and Foundations Behind the Practical
+
+#### Concepts of Data Visualization
+Data visualization is a critical tool in **Exploratory Data Analysis (EDA)**, allowing analysts to uncover patterns, trends, and outliers in data. This practical focuses on **box plots**, a statistical visualization technique for summarizing the distribution of numeric data across categorical groups.
+
+Key concepts relevant to this practical include:
+
+1. **Exploratory Data Analysis (EDA)**:
+   - **Definition**: EDA involves analyzing datasets to summarize their characteristics, often using visualizations like box plots to explore distributions and relationships.
+   - **Purpose**: To understand data structure, detect outliers, identify patterns, and generate hypotheses.
+   - **In This Practical**: Box plots are used to explore how `Age` and `Fare` vary across `Sex` and `Survived`, helping to identify differences in age or fare distributions between genders and survival groups.
+
+2. **Box Plot (Box-and-Whisker Plot)**:
+   - **Definition**: A box plot displays the distribution of a numeric variable using five key statistics:
+     - **Minimum**: The smallest value within 1.5 times the interquartile range (IQR) from the first quartile (Q1).
+     - **First Quartile (Q1)**: The 25th percentile (25% of data is below this value).
+     - **Median (Q2)**: The 50th percentile (middle value).
+     - **Third Quartile (Q3)**: The 75th percentile (75% of data is below this value).
+     - **Maximum**: The largest value within 1.5 times the IQR from Q3.
+   - **Outliers**: Data points outside the whiskers (beyond 1.5 * IQR from Q1 or Q3) are plotted as individual dots.
+   - **Purpose**: To summarize the spread, central tendency, and skewness of data, and to compare distributions across groups.
+   - **In This Practical**: Box plots show:
+     - The distribution of `Age` for males and females, with and without survival information.
+     - The distribution of `Fare` for survivors vs. non-survivors.
+
+3. **Categorical vs. Numeric Variables**:
+   - **Categorical Variables**: Represent categories (e.g., `Sex`: male/female; `Survived`: 0/1).
+   - **Numeric Variables**: Represent numerical values (e.g., `Age`, `Fare`).
+   - **In This Practical**: Box plots use categorical variables (`Sex`, `Survived`) on the x-axis or as `hue`, and numeric variables (`Age`, `Fare`) on the y-axis.
+
+4. **Hue Parameter in Seaborn**:
+   - **Definition**: The `hue` parameter in Seaborn adds a third dimension to visualizations by coloring data points or groups based on a categorical variable.
+   - **Purpose**: To compare distributions across subgroups (e.g., survivors vs. non-survivors within each gender).
+   - **In This Practical**: The `hue="Survived"` parameter splits the `Age` vs. `Sex` box plot into survivors (1) and non-survivors (0) for each gender.
+
+5. **Titanic Dataset**:
+   - **Description**: Contains 891 passenger records with columns:
+     - `PassengerId`: Unique ID.
+     - `Survived`: 0 (did not survive), 1 (survived).
+     - `Pclass`: Passenger class (1, 2, 3).
+     - `Name`: Passenger's name.
+     - `Sex`: Male or female.
+     - `Age`: Age in years (some missing values).
+     - `SibSp`: Number of siblings/spouses aboard.
+     - `Parch`: Number of parents/children aboard.
+     - `Ticket`: Ticket number.
+     - `Fare`: Ticket fare.
+     - `Cabin`: Cabin number (many missing).
+     - `Embarked`: Port of embarkation (C, Q, S).
+   - **Purpose**: A standard dataset for teaching data analysis due to its mix of categorical, numeric, and missing data.
+   - **In This Practical**: Used to explore `Age` and `Fare` distributions across `Sex` and `Survived`.
+
+6. **Seaborn and Matplotlib**:
+   - **Seaborn**: A Python visualization library built on Matplotlib, designed for statistical graphics with simple syntax.
+   - **Matplotlib**: A foundational plotting library for customizable visualizations, used as Seaborn's backend.
+   - **In This Practical**: Seaborn's `boxplot` is used to create box plots, with Matplotlib rendering the plots.
+
+#### Foundations/Theoretical Background
+1. **Why Use Box Plots?**
+   - Box plots are ideal for comparing distributions across groups, showing central tendency (median), spread (IQR), and outliers.
+   - Example: A box plot of `Age` by `Sex` and `Survived` can reveal if female survivors were younger than male non-survivors, or if fare distributions differ significantly between survivors and non-survivors.
+
+2. **Box Plot Theory**:
+   - **Quartiles and IQR**:
+     - Q1 (25th percentile): Lower boundary of the middle 50% of data.
+     - Q3 (75th percentile): Upper boundary of the middle 50%.
+     - IQR = Q3 - Q1: Measures the spread of the middle 50%.
+     - Whiskers: Extend to the minimum and maximum values within 1.5 * IQR from Q1 and Q3.
+   - **Outliers**: Values outside the whiskers indicate unusual data points (e.g., very young or old passengers).
+   - **Skewness**: If the median is closer to Q1 or Q3, or if whiskers are unequal, the distribution is skewed.
+
+3. **Statistical Insights**:
+   - **Median**: Indicates the central age or fare for each group.
+   - **IQR**: Shows the variability in the middle 50% of the data.
+   - **Outliers**: Highlight unusual cases (e.g., elderly passengers or extremely high fares).
+   - **Group Comparisons**: Box plots allow comparison of medians, spreads, and outliers across groups (e.g., male vs. female, survived vs. not survived).
+
+4. **Python Libraries**:
+   - **Pandas**: Manages tabular data (DataFrames) for loading and filtering.
+   - **Seaborn**: Simplifies creating box plots with categorical and numeric data.
+   - **Matplotlib**: Provides plot rendering and customization.
+
+#### Why This Practical Matters
+- **Learning Objective**: Teaches students to create and interpret box plots, a key EDA tool, and to analyze distributions across multiple categorical variables.
+- **Real-World Application**: Understanding age and fare distributions by gender and survival can reveal socioeconomic or demographic factors influencing survival on the Titanic, relevant for historical analysis or predictive modeling.
+- **Skill Development**: Builds proficiency in Pandas, Seaborn, and Matplotlib, and introduces advanced visualization techniques (e.g., using `hue`).
+
+---
+
+### 3. Explanation of Code Blocks in Easy Language
+
+The `Assignment_9_Data_Visualization_II.ipynb` notebook contains several code blocks for loading data and creating box plots, along with markdown explanations. Below, I explain each code block in simple language.
+
+#### Code Block 1: Importing Libraries and Loading the Dataset
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+dataset = pd.read_csv('/content/train.csv')
+dataset.head()
+```
+- **What It Does**:
+  - **Imports Libraries**:
+    - `pandas` (as `pd`): Loads and manages the Titanic dataset (a table of passenger data).
+    - `numpy` (as `np`): Supports numerical operations (not used here but included).
+    - `matplotlib.pyplot` (as `plt`): Renders plots (works with Seaborn).
+    - `seaborn` (as `sns`): Creates statistical visualizations like box plots.
+  - **Loads the Dataset**:
+    - Reads `train.csv` (Titanic dataset) from the `/content/` folder (likely Google Colab).
+    - Stores it in a variable `dataset` (a Pandas DataFrame).
+  - **Displays First 5 Rows**:
+    - `dataset.head()` shows the first 5 rows of the dataset to preview its structure.
+- **Why It’s Important**:
+  - Loads the data for analysis.
+  - Shows the columns (`PassengerId`, `Survived`, `Sex`, `Age`, etc.) and sample data, helping understand the dataset.
+- **Output**:
+  - A table with 5 rows and 12 columns, e.g.:
+    - Passenger 1: Male, age 22, did not survive (`Survived` = 0), fare 7.25.
+    - Passenger 2: Female, age 38, survived (`Survived` = 1), fare 71.2833.
+
+#### Code Block 2: Box Plot of Age by Sex
+```python
+sns.boxplot(x='Sex', y='Age', data=dataset)
+```
+- **What It Does**:
+  - Creates a box plot using Seaborn’s `boxplot` function.
+  - **Parameters**:
+    - `x='Sex'`: Puts `Sex` (male, female) on the x-axis (categorical).
+    - `y='Age'`: Puts `Age` (numeric) on the y-axis.
+    - `data=dataset`: Uses the Titanic dataset.
+  - Shows the distribution of ages for male and female passengers.
+- **Why It’s Important**:
+  - Visualizes how ages vary between genders.
+  - Helps identify differences in median age, spread, and outliers (e.g., are males older or younger than females?).
+- **Output**:
+  - A plot with two boxes:
+    - **Male**: Shows the age distribution for male passengers.
+    - **Female**: Shows the age distribution for female passengers.
+    - Each box shows the median, Q1, Q3, whiskers, and outliers (dots for very young or old passengers).
+    - Observations (based on Titanic data):
+      - Median age for males is ~30, slightly higher than females (~28).
+      - Both have similar IQRs (~20-40), but males may have more outliers (e.g., older males).
+
+#### Markdown Explanation: Box Plot Interpretation
+```markdown
+The box plot is used to display the distribution of the categorical data in the form of quartiles. The center of the box shows the median value. The value from the lower whisker to the bottom of the box shows the first quartile. From the bottom of the box to the middle of the box lies the second quartile. From the middle of the box to the top of the box lies the third quartile and finally from the top of the box to the top whisker lies the last quartile.
+Now let's plot a box plot that displays the distribution for the age with respect to each gender. You need to pass the categorical column as the first parameter (which is sex in our case) and the numeric column (age in our case) as the second parameter. Finally, the dataset is passed as the third parameter.
+
+Let's try to understand the box plot for female. The first quartile starts at around 5 and ends at 22 which means that 25% of the passengers are aged between 5 and 25. The second quartile starts at around 23 and ends at around 32 which means that 25% of the passengers are aged between 23 and 32. Similarly, the third quartile starts and ends between 34 and 42, hence 25% passengers are aged within this range and finally the fourth or last quartile starts at 43 and ends around 65.
+
+If there are any outliers or the passengers that do not belong to any of the quartiles, they are called outliers and are represented by dots on the box plot.
+
+You can make your box plots more fancy by adding another layer of distribution. For instance, if you want to see the box plots of forage of passengers of both genders, along with the information about whether or not they survived, you can pass the survived as value to the hue parameter as shown below:
+```
+- **What It Says**:
+  - Explains the structure of a box plot (quartiles, median, whiskers, outliers).
+  - Describes the box plot for `Age` vs. `Sex`, focusing on females:
+    - Q1: ~5 to 22 (25% of females aged 5-22).
+    - Q2: ~23 to 32 (25% aged 23-32).
+    - Q3: ~34 to 42 (25% aged 34-42).
+    - Q4: ~43 to 65 (25% aged 43-65).
+    - Outliers: Represented by dots (e.g., very young or old females).
+  - Introduces the `hue` parameter to add survival information.
+- **Accuracy Notes**:
+  - The quartile ranges for females are approximate and may not match the data exactly (e.g., Q1 is likely ~14-22, not 5-22, based on Titanic data).
+  - The explanation of "forage" is a typo (should be "age").
+  - The concept of quartiles is correct, but the ranges need verification with actual data.
+
+#### Code Block 3: Box Plot of Age by Sex and Survived
+```python
+sns.boxplot(x='Sex', y='Age', data=dataset, hue="Survived")
+```
+- **What It Does**:
+  - Creates a box plot with an additional layer for `Survived`.
+  - **Parameters**:
+    - `x='Sex'`: `Sex` (male, female) on the x-axis.
+    - `y='Age'`: `Age` on the y-axis.
+    - `data=dataset`: Titanic dataset.
+    - `hue="Survived"`: Colors boxes by `Survived` (0 = did not survive, 1 = survived).
+  - Shows age distributions for:
+    - Male non-survivors (Survived = 0).
+    - Male survivors (Survived = 1).
+    - Female non-survivors (Survived = 0).
+    - Female survivors (Survived = 1).
+- **Why It’s Important**:
+  - Fulfills the query’s requirement to show age distribution by gender and survival.
+  - Allows comparison of age distributions across four groups, revealing patterns (e.g., were younger females more likely to survive?).
+- **Output**:
+  - A plot with four boxes:
+    - **Male, Survived = 0**: Age distribution for male non-survivors.
+    - **Male, Survived = 1**: Age distribution for male survivors.
+    - **Female, Survived = 0**: Age distribution for female non-survivors.
+    - **Female, Survived = 1**: Age distribution for female survivors.
+    - Observations (based on Titanic data):
+      - **Male non-survivors**: Median ~30, IQR ~20-40, some older outliers.
+      - **Male survivors**: Median ~28, slightly younger, fewer outliers.
+      - **Female non-survivors**: Median ~25, IQR ~18-35, some young/old outliers.
+      - **Female survivors**: Median ~28, IQR ~20-38, fewer outliers.
+      - Female survivors tend to be slightly older than non-survivors; male survivors are slightly younger than non-survivors.
+
+#### Code Block 4: Redundant Box Plot (Age by Sex)
+```python
+sns.boxplot(x='Sex', y='Age', data=dataset)
+```
+- **What It Does**:
+  - Repeats the first box plot (`Age` vs. `Sex` without `Survived`).
+  - Identical to Code Block 2.
+- **Why It’s Important**:
+  - Redundant and unnecessary, as it duplicates an earlier plot.
+  - May be included for comparison or by mistake.
+- **Output**:
+  - Same as Code Block 2 (box plots for male and female ages).
+
+#### Code Block 5: Box Plot of Fare by Survived
+```python
+sns.boxplot(x='Survived', y='Fare', data=dataset)
+```
+- **What It Does**:
+  - Creates a box plot for `Fare` (numeric) vs. `Survived` (categorical).
+  - **Parameters**:
+    - `x='Survived'`: `Survived` (0, 1) on the x-axis.
+    - `y='Fare'`: `Fare` on the y-axis.
+    - `data=dataset`: Titanic dataset.
+  - Shows the distribution of fares for survivors vs. non-survivors.
+- **Why It’s Important**:
+  - Not required by the query but provides additional insight.
+  - Helps explore whether higher fares are associated with survival (e.g., wealthier passengers in 1st class may have had better access to lifeboats).
+- **Output**:
+  - A plot with two boxes:
+    - **Survived = 0**: Fare distribution for non-survivors.
+    - **Survived = 1**: Fare distribution for survivors.
+    - Observations (based on Titanic data):
+      - **Non-survivors**: Median fare ~£10, IQR ~£7-£20, many low fares, few high-fare outliers.
+      - **Survivors**: Median fare ~£26, IQR ~£10-£50, more high-fare outliers.
+      - Survivors paid significantly higher fares, suggesting wealth or class influenced survival.
+
+---
+
+### 4. Observations from the Box Plot Statistics
+
+As required by the query, here are observations based on the box plot of `Age` with respect to `Sex` and `Survived` (Code Block 3), supplemented by the `Fare` vs. `Survived` plot:
+
+1. **Age Distribution by Sex and Survival**:
+   - **Male Non-Survivors (Survived = 0)**:
+     - Median age: ~30 years.
+     - IQR: ~20-40 years (middle 50% of male non-survivors).
+     - Outliers: Some older males (e.g., >60) and a few very young.
+     - Observation: Male non-survivors span a wide age range, with a slightly older median.
+   - **Male Survivors (Survived = 1)**:
+     - Median age: ~28 years.
+     - IQR: ~20-35 years.
+     - Outliers: Fewer than non-survivors, mostly older males.
+     - Observation: Male survivors are slightly younger than non-survivors, suggesting younger males may have had better survival chances.
+   - **Female Non-Survivors (Survived = 0)**:
+     - Median age: ~25 years.
+     - IQR: ~18-35 years.
+     - Outliers: Some very young (e.g., <10) and older females (e.g., >50).
+     - Observation: Female non-survivors are younger on average, with a narrower age range.
+   - **Female Survivors (Survived = 1)**:
+     - Median age: ~28 years.
+     - IQR: ~20-38 years.
+     - Outliers: Fewer, mostly older females.
+     - Observation: Female survivors are slightly older than non-survivors, with a similar spread.
+
+2. **General Patterns**:
+   - **Gender Differences**: Females have a slightly lower median age (~27-28) than males (~28-30) across survival groups, indicating females in the dataset are generally younger.
+   - **Survival Differences**:
+     - Male survivors are younger than male non-survivors, possibly due to younger males being prioritized or physically able to escape.
+     - Female survivors are slightly older than female non-survivors, which may reflect prioritization of women (e.g., "women and children first") across age groups.
+   - **Outliers**: Both genders have outliers, but males have more older outliers, especially among non-survivors, suggesting older males were less likely to survive.
+   - **Skewness**: Age distributions are slightly right-skewed (longer upper whiskers), especially for males, indicating more older passengers than very young ones.
+
+3. **Fare Distribution by Survival** (Extra Insight):
+   - **Non-Survivors (Survived = 0)**:
+     - Median fare: ~£10.
+     - IQR: ~£7-£20.
+     - Outliers: Some high fares (e.g., >£100), but fewer than survivors.
+     - Observation: Non-survivors typically paid lower fares, likely 3rd-class passengers.
+   - **Survivors (Survived = 1)**:
+     - Median fare: ~£26.
+     - IQR: ~£10-£50.
+     - Outliers: Many high fares (e.g., >£200), indicating wealthier passengers.
+     - Observation: Survivors paid significantly higher fares, suggesting 1st-class passengers had better survival chances due to access to lifeboats or cabin locations.
+
+4. **Key Inferences**:
+   - **Age and Survival**: Age differences are subtle, but younger males and slightly older females were more likely to survive, possibly due to evacuation priorities ("women and children first").
+   - **Gender and Survival**: Females have a narrower age range and fewer outliers, indicating a more consistent age profile. Males show more variability, especially among non-survivors.
+   - **Fare and Survival**: Higher fares strongly correlate with survival, likely because 1st-class passengers (higher fares) had better access to lifeboats and were located on upper decks.
+   - **Outliers**: Outliers in age (very young or old) and fare (very high) highlight unique cases, such as elderly passengers or extremely wealthy individuals.
+
+5. **Limitations**:
+   - **Missing Data**: The `Age` column has 177 missing values (out of 891), which may skew the box plots (Seaborn ignores missing values).
+   - **Approximate Quartiles**: The markdown’s quartile ranges for females (e.g., Q1: 5-22) are inaccurate; actual Q1 is ~14-22 based on Titanic data.
+   - **Context**: Box plots don’t show sample sizes (e.g., fewer male survivors), which affects interpretation.
+
+---
+
