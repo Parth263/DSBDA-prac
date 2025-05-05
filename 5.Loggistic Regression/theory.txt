@@ -1,0 +1,4 @@
+A. Logistic Regression is a statistical model used for binary classification tasks — where the output is one of two possible classes (e.g., yes/no, 0/1, spam/not spam).
+    Instead of predicting exact values like in linear regression, it predicts the probability that a given input belongs to a particular class using the.It’s widely used in spam detection, disease diagnosis, fraud detection, etc.
+B.  from sklearn.linear_model import LogisticRegression
+    is used to import the LogisticRegression class from scikit-learn, which allows you to create and train a logistic regression model.
