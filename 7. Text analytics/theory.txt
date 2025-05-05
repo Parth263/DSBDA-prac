@@ -1,287 +1,342 @@
-In Code :-
-* from nltk.tokenize import sent_tokenize #It imports the sent_tokenize function from NLTK’s tokenize module.
-* nltk.download('punkt') #punkt is a data package NLTK uses internally to break text into sentences or words.
-* FreqDist stands for "Frequency Distribution." It calculates and stores the frequency (count) of each unique token in a list.
-* FreqDist will count how many times each unique word or token appears in the list.
-* from nltk.corpus import stopwords - This line imports the stopwords module from the nltk.corpus package.
-* WordNet is a large English dictionary organized by synonyms, antonyms, and semantic relationships.
-* # Lemmatize the word with POS tag 'v' (verb)
-  print("Lemmatized Word:", lem.lemmatize(word, "v"))
+Below, I will provide a comprehensive response covering:
+
+1. **Problem Statement, Goals, Explanations, and Foundational/Theoretical Concepts** of Text Analytics, focusing on document preprocessing and document representation.
+2. **Code Block Explanation of `My7.ipynb`**, detailing how it addresses the problem statement.
+3. **Viva Questions** to help prepare for an oral examination on this topic.
+
+---
+
+### 1. Problem Statement, Goals, Explanations, and Foundational/Theoretical Concepts
+
+#### Problem Statement
+The task involves implementing a **Text Analytics** pipeline to preprocess textual data and represent documents for further analysis. Specifically, the pipeline includes:
+
+1. **Document Preprocessing**:
+   - **Tokenization**: Splitting text into smaller units (sentences or words).
+   - **POS Tagging**: Assigning grammatical tags (e.g., noun, verb) to words.
+   - **Stop Words Removal**: Removing common words (e.g., "is", "the") that carry little meaning.
+   - **Stemming**: Reducing words to their root form (e.g., "running" → "run").
+   - **Lemmatization**: Reducing words to their dictionary form (e.g., "better" → "good").
+2. **Document Representation**:
+   - **Term Frequency (TF)**: Counting the frequency of each word in a document.
+   - **Inverse Document Frequency (IDF)**: Weighing words based on their rarity across a collection of documents, typically combined with TF to form TF-IDF.
+
+The goal is to prepare text data for tasks like sentiment analysis, text classification, or information retrieval by transforming raw text into a structured, numerical format.
+
+#### Goals
+1. **Clean and Structure Text Data**: Preprocess raw text to remove noise (e.g., stop words, punctuation) and normalize words (via stemming or lemmatization) for consistency.
+2. **Extract Meaningful Features**: Represent documents in a way that captures the importance of words (using TF and TF-IDF) for downstream machine learning tasks.
+3. **Enable Analysis**: Create a pipeline that can be applied to any text dataset, ensuring scalability and robustness.
+4. **Evaluate Utility**: Optionally, test the representations (e.g., via a classifier) to assess their effectiveness in a practical task like sentiment analysis.
+
+#### Explanations and Foundational/Theoretical Concepts
+
+**Text Analytics** (or Natural Language Processing, NLP) involves extracting insights from unstructured text data. The preprocessing and representation steps are critical to converting text into a format suitable for machine learning algorithms. Below are the foundational concepts:
+
+1. **Document Preprocessing**:
+   - **Tokenization**:
+     - **Definition**: The process of breaking text into smaller units, such as sentences or words, called tokens.
+     - **Purpose**: Tokens serve as the basic units for further processing. Sentence tokenization helps analyze text structure, while word tokenization enables word-level analysis.
+     - **Theory**: Tokenization relies on rules or models to identify boundaries (e.g., spaces, punctuation). Tools like NLTK use pre-trained models for accurate splitting.
+     - **Example**: "I love coding!" → ["I", "love", "coding", "!"].
+   - **POS Tagging**:
+     - **Definition**: Assigning grammatical tags (e.g., noun, verb, adjective) to each token based on its role in the sentence.
+     - **Purpose**: Provides syntactic context, useful for tasks like named entity recognition or dependency parsing.
+     - **Theory**: POS tagging uses probabilistic models (e.g., Hidden Markov Models) or rule-based approaches trained on annotated corpora (e.g., Penn Treebank).
+     - **Example**: "I love coding" → [("I", "PRP"), ("love", "VBP"), ("coding", "NN")].
+   - **Stop Words Removal**:
+     - **Definition**: Removing common words (e.g., "the", "is", "and") that appear frequently but contribute little to meaning.
+     - **Purpose**: Reduces noise and focuses on content-bearing words, improving model efficiency and performance.
+     - **Theory**: Stop words are typically defined by a precompiled list (e.g., NLTK's English stop words). Domain-specific stop words may also be used.
+     - **Example**: ["I", "love", "to", "code"] → ["love", "code"] after removing "I", "to".
+   - **Stemming**:
+     - **Definition**: Reducing words to their root or base form by removing suffixes (e.g., "running" → "run").
+     - **Purpose**: Normalizes variations of a word to treat them as the same term, reducing vocabulary size.
+     - **Theory**: Algorithms like Porter Stemmer use heuristic rules to strip suffixes. Stemming is fast but may produce non-dictionary words (e.g., "studies" → "studi").
+     - **Example**: "running", "runner", "ran" → "run".
+   - **Lemmatization**:
+     - **Definition**: Reducing words to their dictionary form (lemma) based on context and part of speech (e.g., "better" → "good").
+     - **Purpose**: Similar to stemming but produces valid words, improving interpretability and accuracy in tasks requiring semantic understanding.
+     - **Theory**: Lemmatization uses lexical resources like WordNet and POS tags to map words to their lemmas. It is computationally heavier than stemming.
+     - **Example**: "is", "are", "am" → "be".
+
+2. **Document Representation**:
+   - **Term Frequency (TF)**:
+     - **Definition**: The count of a word's occurrences in a document, often normalized (e.g., by document length).
+     - **Purpose**: Captures the importance of a word within a single document.
+     - **Theory**: TF assumes that frequently occurring words are more relevant to the document's content. Normalized TF (e.g., TF = count / total words) accounts for document length.
+     - **Formula**: 
+       \[
+       \text{TF}(t, d) = \frac{\text{count of term } t \text{ in document } d}{\text{total words in document } d}
+       \]
+     - **Example**: In "I love to code, coding is fun", TF("code") = 2/7 ≈ 0.286.
+   - **Inverse Document Frequency (IDF)**:
+     - **Definition**: A measure of a word's rarity across a collection of documents, giving higher weight to rare words.
+     - **Purpose**: Downweights common words (e.g., "the") and emphasizes terms that are discriminative (e.g., "algorithm").
+     - **Theory**: IDF assumes rare words are more informative. It is calculated as the logarithm of the inverse fraction of documents containing the term.
+     - **Formula**: 
+       \[
+       \text{IDF}(t, D) = \log\left(\frac{N}{\text{number of documents containing term } t}\right)
+       \]
+       where \( N \) is the total number of documents.
+     - **Example**: If "algorithm" appears in 10 out of 1000 documents, IDF("algorithm") = log(1000/10) = log(100) ≈ 2.
+   - **TF-IDF**:
+     - **Definition**: A weighted score combining TF and IDF to represent a word's importance in a document relative to the corpus.
+     - **Purpose**: Balances local (TF) and global (IDF) importance, widely used in text mining and information retrieval.
+     - **Theory**: TF-IDF assumes that a term is most relevant if it is frequent in a document but rare across the corpus.
+     - **Formula**: 
+       \[
+       \text{TF-IDF}(t, d, D) = \text{TF}(t, d) \times \text{IDF}(t, D)
+       \]
+     - **Example**: If TF("code") = 0.286 and IDF("code") = 1.5, TF-IDF("code") = 0.286 × 1.5 = 0.429.
+   - **Bag of Words (BoW)**:
+     - **Definition**: A model representing a document as a vector of word frequencies (or TF scores), ignoring word order.
+     - **Purpose**: Simplifies text into a numerical format for machine learning.
+     - **Theory**: BoW assumes word independence and focuses on word presence/frequency. It is implemented using tools like `CountVectorizer`.
+     - **Example**: For documents ["I love code", "Code is fun"], BoW might yield:
+       \[
+       \begin{bmatrix}
+       1 & 1 & 1 & 0 \\
+       1 & 0 & 0 & 1
+       \end{bmatrix}
+       \]
+       for vocabulary ["code", "love", "I", "fun"].
+
+#### Why These Steps Matter
+- **Preprocessing** reduces noise, normalizes text, and prepares it for feature extraction, improving model performance and reducing computational complexity.
+- **Representation** (TF, IDF, TF-IDF) converts text into numerical features, enabling machine learning algorithms to process and analyze it.
+- These techniques form the foundation of many NLP applications, including sentiment analysis, topic modeling, and search engines.
+
+---
+
+### 2. Code Block Explanation of `My7.ipynb`
+
+The `My7.ipynb` notebook implements the text analytics pipeline described in the problem statement. Below, I explain each code block, its purpose, and how it aligns with the theoretical concepts.
+
+#### Overview of `My7.ipynb`
+- **Environment**: Likely Google Colab (based on `/content/train.tsv` path), using Python 3.11.
+- **Libraries**: Uses `nltk` for preprocessing, `sklearn` for document representation and classification, and `pandas` for data handling.
+- **Dataset**: Processes a sample text for preprocessing and the `train.tsv` dataset (containing phrases and sentiment labels) for TF and TF-IDF.
+- **Tasks**:
+  - Preprocessing: Tokenization, POS Tagging, Stop Words Removal, Stemming, Lemmatization.
+  - Representation: TF (via Bag of Words) and TF-IDF.
+  - Evaluation: Trains a Naive Bayes classifier to test the representations.
+
+#### Code Block Explanation
+
+1. **Setup and Imports**:
+   ```python
+   !pip install nltk
+   !pip install --upgrade pip
+   import nltk
+   nltk.download('punkt')
+   nltk.download('punkt_tab')
+   from nltk.tokenize import sent_tokenize
+   tokenized_text = sent_tokenize(text)
+   print(tokenized_text)
+   ```
+   - **Purpose**: Installs and sets up NLTK, downloads tokenization models (`punkt`, `punkt_tab`), and imports the sentence tokenizer.
+   - **Explanation**: Ensures the environment is ready for NLP tasks. `punkt` is a pre-trained model for tokenization, and `punkt_tab` may be an additional resource for robustness.
+   - **Alignment with Theory**: Prepares for tokenization, the first step in preprocessing.
+
+2. **Sample Text and Sentence Tokenization**:
+   ```python
+   text = """Hello Mr. Smith, how are you doing today ? The weather is great, and the city is awesome ! The sky is pinkish-blue. You shouldn't eat cardboard """
+   tokenized_text = sent_tokenize(text)
+   print(tokenized_text)
+   ```
+   - **Output**:
+     ```python
+     ['Hello Mr. Smith, how are you doing today ?', 'The weather is great, and the city is awesome !', 'The sky is pinkish-blue.', "You shouldn't eat cardboard"]
+     ```
+   - **Purpose**: Splits the sample text into sentences.
+   - **Explanation**: Uses `sent_tokenize` to identify sentence boundaries based on punctuation and grammar. Each sentence is a token for further analysis.
+   - **Alignment with Theory**: Implements sentence tokenization, a key preprocessing step for structural analysis.
+
+3. **Word Tokenization**:
+   ```python
+   from nltk.tokenize import word_tokenize
+   tokenized_word = word_tokenize(text)
+   print(tokenized_word)
+   ```
+   - **Output**:
+     ```python
+     ['Hello', 'Mr.', 'Smith', ',', 'how', 'are', 'you', 'doing', 'today', '?', 'The', 'weather', 'is', 'great', ',', 'and', 'the', 'city', 'is', 'awesome', '!', 'The', 'sky', 'is', 'pinkish-blue', '.', 'You', 'should', "n't", 'eat', 'cardboard']
+     ```
+   - **Purpose**: Splits the text into individual words and punctuation.
+   - **Explanation**: `word_tokenize` uses NLTK's pre-trained model to split text based on spaces and punctuation, preserving tokens like "Mr." and "n't".
+   - **Alignment with Theory**: Implements word tokenization, enabling word-level processing for subsequent steps.
+
+4. **POS Tagging**:
+   ```python
+   nltk.download('averaged_perceptron_tagger')
+   sent = "Albert Einstein was born in Ulm, Germany in 1879."
+   tokens = nltk.word_tokenize(sent)
+   nltk.pos_tag(tokens)
+   ```
+   - **Output**:
+     ```python
+     [('Albert', 'NNP'), ('Einstein', 'NNP'), ('was', 'VBD'), ('born', 'VBN'), ('in', 'IN'), ('Ulm', 'NNP'), (',', ','), ('Germany', 'NNP'), ('in', 'IN'), ('1879', 'CD'), ('.', '.')]
+     ```
+   - **Purpose**: Assigns grammatical tags to tokens in a sample sentence.
+   - **Explanation**: Uses NLTK's `pos_tag` with the `averaged_perceptron_tagger` model to label each token with its part of speech (e.g., `NNP` for proper noun, `VBD` for past tense verb). The example uses a different sentence for clarity.
+   - **Alignment with Theory**: Implements POS tagging, providing syntactic context for tasks like lemmatization or named entity recognition.
+   - **Note**: It would be more consistent to apply POS tagging to the main sample text.
+
+5. **Stop Words Removal**:
+   ```python
+   from nltk.corpus import stopwords
+   nltk.download('stopwords')
+   stop_words = set(stopwords.words("english"))
+   filtered_sent = [w for w in tokenized_word if w not in stop_words]
+   print("Tokenized Sentence:", tokenized_word)
+   print("Filtered Sentence:", filtered_sent)
+   ```
+   - **Output**:
+     ```python
+     Tokenized Sentence: ['Hello', 'Mr.', 'Smith', ',', 'how', 'are', 'you', 'doing', 'today', '?', 'The', 'weather', 'is', 'great', ',', 'and', 'the', 'city', 'is', 'awesome', '!', 'The', 'sky', 'is', 'pinkish-blue', '.', 'You', "n't", 'eat', 'cardboard']
+     Filtered Sentence: ['Hello', 'Mr.', 'Smith', ',', 'today', '?', 'weather', 'great', ',', 'city', 'awesome', '!', 'sky', 'pinkish-blue', '.', "n't", 'eat', 'cardboard']
+     ```
+   - **Purpose**: Removes common English stop words from the tokenized words.
+   - **Explanation**: Uses NLTK's stop words list to filter out words like "is", "are", and "and". Punctuation and non-stop words are retained.
+   - **Alignment with Theory**: Implements stop words removal to reduce noise and focus on content-bearing words.
+
+6. **Stemming**:
+   ```python
+   from nltk.stem import PorterStemmer
+   ps = PorterStemmer()
+   stemmed_words = [ps.stem(w) for w in filtered_sent]
+   print("Filtered Sentence:", filtered_sent)
+   print("Stemmed Sentence:", stemmed_words)
+   ```
+   - **Output**:
+     ```python
+     Filtered Sentence: ['Hello', 'Mr.', 'Smith', ',', 'today', '?', 'weather', 'great', ',', 'city', 'awesome', '!', 'sky', 'pinkish-blue', '.', "n't", 'eat', 'cardboard']
+     Stemmed Sentence: ['hello', 'mr.', 'smith', ',', 'today', '?', 'weather', 'great', ',', 'citi', 'awesom', '!', 'sky', 'pinkish-blu', '.', "n't", 'eat', 'cardboard']
+     ```
+   - **Purpose**: Reduces filtered words to their root form.
+   - **Explanation**: Applies the Porter Stemmer, which uses rule-based suffix stripping (e.g., "city" → "citi", "awesome" → "awesom"). Non-words like punctuation are unchanged.
+   - **Alignment with Theory**: Implements stemming to normalize word variations, reducing vocabulary size.
+
+7. **Lemmatization**:
+   ```python
+   from nltk.stem.wordnet import WordNetLemmatizer
+   nltk.download('wordnet')
+   lem = WordNetLemmatizer()
+   word = "flying"
+   print("Lemmatized Word:", lem.lemmatize(word, "v"))
+   print("Stemmed Word:", ps.stem(word))
+   ```
+   - **Output**:
+     ```python
+     Lemmatized Word: fly
+     Stemmed Word: fli
+     ```
+   - **Purpose**: Demonstrates lemmatization on a single word.
+   - **Explanation**: Uses `WordNetLemmatizer` to reduce "flying" to "fly" (verb form, specified by "v"). Compares it to stemming, which produces "fli". The example is limited to one word.
+   - **Alignment with Theory**: Implements lemmatization, producing valid dictionary words. The use of POS ("v" for verb) aligns with lemmatization's context-awareness.
+   - **Note**: Applying lemmatization to the entire filtered sentence would be more comprehensive.
+
+8. **Loading the Dataset**:
+   ```python
+   import pandas as pd
+   data = pd.read_csv('/content/train.tsv', sep='\t')
+   data['Phrase'] = data['Phrase'].fillna('')
+   ```
+   - **Purpose**: Loads the `train.tsv` dataset and handles missing values.
+   - **Explanation**: Reads a tab-separated file (likely containing columns like `Phrase` and `Sentiment`). Fills missing values in the `Phrase` column with empty strings to prevent errors during processing.
+   - **Alignment with Theory**: Prepares a real-world dataset for document representation, ensuring robustness.
+
+9. **Term Frequency (TF) with Bag of Words**:
+   ```python
+   from sklearn.feature_extraction.text import CountVectorizer
+   from nltk.tokenize import RegexpTokenizer
+   token = RegexpTokenizer(r'[a-zA-Z0-9]+')
+   cv = CountVectorizer(lowercase=True, stop_words='english', ngram_range=(1,1), tokenizer=token.tokenize)
+   text_counts = cv.fit_transform(data['Phrase'])
+   ```
+   - **Purpose**: Creates a Bag of Words model to represent term frequencies.
+   - **Explanation**:
+     - `RegexpTokenizer(r'[a-zA-Z0-9]+')` tokenizes text into alphanumeric words, ignoring punctuation.
+     - `CountVectorizer` converts phrases into a sparse matrix where each row is a phrase, and each column is a word from the vocabulary, with values as word counts.
+     - Parameters: `lowercase=True` normalizes case, `stop_words='english'` removes stop words, `ngram_range=(1,1)` considers single words (unigrams).
+     - Output (`text_counts`) is a sparse matrix of shape (number of phrases, vocabulary size).
+   - **Alignment with Theory**: Implements TF via BoW, capturing word frequencies for each document.
+
+10. **TF-IDF**:
+    ```python
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    tf = TfidfVectorizer()
+    text_tf = tf.fit_transform(data['Phrase'])
+    print(text_tf)
+    ```
+    - **Output** (partial):
+      ```python
+      <Compressed Sparse Row sparse matrix of dtype 'float64'
+          with 972101 stored elements and shape (156060, 15240)>
+        Coords    Values
+        (0, 11837)    0.1761994204821687
+        (0, 9227)     0.27061683772839323
+        ...
+      ```
+    - **Purpose**: Creates a TF-IDF representation of the phrases.
+    - **Explanation**:
+      - `TfidfVectorizer` computes TF-IDF scores, combining term frequency with inverse document frequency.
+      - Default settings include tokenization, lowercase conversion, and stop word removal.
+      - Output (`text_tf`) is a sparse matrix where values are TF-IDF scores, emphasizing rare but frequent-in-document terms.
+    - **Alignment with Theory**: Implements TF-IDF, weighing terms by their local and global importance.
+
+11. **Model Evaluation with Naive Bayes (BoW)**:
+    ```python
+    from sklearn.model_selection import train_test_split
+    from sklearn.naive_bayes import MultinomialNB
+    from sklearn import metrics
+    X_train, X_test, y_train, y_test = train_test_split(text_counts, data['Sentiment'], test_size=0.3, random_state=1)
+    clf = MultinomialNB().fit(X_train, y_train)
+    predicted = clf.predict(X_test)
+    print("MultinomialNB Accuracy:", metrics.accuracy_score(y_test, predicted))
+    ```
+    - **Output**:
+      ```python
+      MultinomialNB Accuracy: 0.6048955529924388
+      ```
+    - **Purpose**: Tests the BoW representation in a sentiment classification task.
+    - **Explanation**:
+      - Splits data into 70% training and 30% testing sets.
+      - Trains a Multinomial Naive Bayes classifier on the BoW matrix (`text_counts`) to predict sentiment labels.
+      - Reports accuracy (60.49%), indicating the representation's effectiveness.
+    - **Alignment with Theory**: Validates the BoW model in a practical NLP task, showing how TF can be used for classification.
+
+12. **Model Evaluation with Naive Bayes (TF-IDF)**:
+    ```python
+    X_train, X_test, y_train, y_test = train_test_split(text_tf, data['Sentiment'], test_size=0.3, random_state=123)
+    clf = MultinomialNB().fit(X_train, y_train)
+    predicted = clf.predict(X_test)
+    print("MultinomialNB Accuracy:", metrics.accuracy_score(y_test, predicted))
+    ```
+    - **Output**:
+      ```python
+      MultinomialNB Accuracy: 0.5865479089239182
+      ```
+    - **Purpose**: Tests the TF-IDF representation in the same sentiment classification task.
+    - **Explanation**:
+      - Similar to the BoW evaluation but uses the TF-IDF matrix (`text_tf`).
+      - Accuracy (58.65%) is slightly lower, possibly due to TF-IDF's weighting reducing the impact of frequent terms.
+    - **Alignment with Theory**: Validates the TF-IDF model, comparing its performance to BoW.
+
+#### How `My7.ipynb` Addresses the Problem Statement
+- **Preprocessing**:
+  - Fully implements tokenization (sentence and word), POS tagging, stop words removal, stemming, and lemmatization.
+  - Uses a sample text to demonstrate each step clearly, with outputs showing the transformation.
+- **Document Representation**:
+  - Computes TF using `CountVectorizer` (BoW) and TF-IDF using `TfidfVectorizer` on the `train.tsv` dataset.
+  - Handles missing values to ensure robustness.
+- **Evaluation**:
+  - Tests both representations in a sentiment analysis task, providing practical validation.
+- **Limitations**:
+  - Lemmatization is limited to a single word example.
+  - POS tagging uses a different sentence, reducing consistency.
+  - Lacks visualization of term frequencies or TF-IDF scores.
+
+---
 
-* # Stem the word using PorterStemmer
-  print("Stemmed Word:", stem.stem(word))
-* pandas is a powerful Python library used for data analysis, manipulation, and handling tabular data.
-* The data.head() function is a method in pandas used to preview the first few rows of a DataFrame.
-*The data.info() function in pandas provides a concise summary of a DataFrame, including information about the data types, the number of non-null entries, and the memory 
-usage.
-* The data.Sentiment.value_counts() function in pandas is used to count the number of occurrences of each unique value in the Sentiment column of your DataFrame.
-* The import matplotlib.pyplot as plt line is used to import the matplotlib.pyplot module with the alias plt(variable)
-* plt.bar(Sentiment_count.index.values, Sentiment_count['Phrase']) - Sentiment_count.index.values -  will be the x-axis (labels like "Positive", "Negative", "Neutral").
-
-Sentiment_count['Phrase'] - will be the y-axis (values like 50, 30, 20), showing the count of each sentiment.
-* CountVectorizer is from sklearn and is used to convert a collection of text documents into a matrix of token counts.
-
-* RegexpTokenizer is from nltk and is used to split the text into tokens (words) using a regular expression.
-* token = RegexpTokenizer(r'[a-zA-Z0-9]+') - This custom tokenizer ensures that only meaningful words are extracted, and punctuation is ignored
-
-*  lowercase=True: Converts all text to lowercase before processing. This avoids treating the same word in different cases (e.g., "Apple" and "apple") as different words.
-
-   stop_words='english': This removes common English stopwords (e.g., "and," "the," "is") during tokenization.
-
-   ngram_range=(1,1): This means you're only looking at unigrams (single words) and not bigrams (pairs of words) or higher n-grams.
-
-   tokenizer=token.tokenize: This specifies that the custom tokenizer (RegexpTokenizer) will be used to split the text into tokens.
-
-*  train_test_split: This function splits the dataset into training and testing subsets.
-
-Training data (X_train, y_train): Used to train the machine learning model.
-
-Testing data (X_test, y_test): Used to evaluate the model's performance.
-
-Parameters:
-
-text_counts: The features (the document-term matrix containing the word counts from the CountVectorizer).
-
-data['Sentiment']: The target labels (the sentiments of the text, such as "Positive", "Negative", etc.).
-
-test_size=0.3: Specifies that 30% of the data should be used for testing, leaving 70% for training.
-
-random_state=1: Ensures that the data is split in the same way every time the code is run, which is important for reproducibility.
-
-* Importing Libraries:
-
-MultinomialNB: A Naive Bayes classifier that is well-suited for text classification problems, especially when the features (like word counts) are represented as counts or 
-frequencies.
-
-metrics: This is used to evaluate the model's performance. In this case, accuracy_score is used to measure the accuracy of predictions.
-
-Training the Classifier:
-
-clf = MultinomialNB().fit(X_train, y_train):
-
-This line initializes a Multinomial Naive Bayes classifier and fits it to the training data (X_train for features, y_train for the target sentiment labels).
-
-The model learns how to associate the word counts with the sentiment labels.
-
-Making Predictions:
-
-predicted = clf.predict(X_test):
-
-After training, the classifier is used to predict the sentiment of the test data (X_test), which contains unseen text data.
-
-The result is stored in the predicted variable.
-
-Evaluating the Model:
-
-metrics.accuracy_score(y_test, predicted):
-
-This function compares the predicted sentiment labels (predicted) with the true labels (y_test) from the test set.
-
-It calculates the accuracy as the proportion of correct predictions out of all test samples.
-
-The accuracy is printed, giving a measure of how well the classifier performed on the test data.
-
-🧠 Why Use Multinomial Naive Bayes for Text Classification?
-Multinomial Naive Bayes is commonly used in text classification tasks, as it works well with discrete features like word counts or frequencies.
-
-* TfidfVectorizer():
-
-This class is used to convert a collection of text documents into a matrix of TF-IDF features.
-
-TF-IDF stands for Term Frequency-Inverse Document Frequency, and it reflects how important a word is to a document in a collection (corpus).
-
-Term Frequency (TF) measures how frequently a term occurs in a document.
-
-Inverse Document Frequency (IDF) adjusts the term frequency based on how frequently the term appears across all documents, reducing the importance of common words (e.g., "the," "is").
-
-fit_transform():
-
-fit(): This method learns the vocabulary and computes the inverse document frequency (IDF) values based on the provided text data.
-
-transform(): This method transforms the text data into a TF-IDF matrix, where each row corresponds to a document, and each column represents a word in the vocabulary. The values represent the TF-IDF score of each word in the document.
-
-text_tf:
-
-This variable stores the resulting TF-IDF matrix after fitting and transforming the text data from the Phrase column.
-
-📘 Explanation:
-train_test_split:
-
-This function is used to split the dataset into two parts: a training set and a test set.
-
-Training data (X_train, y_train): This will be used to train the machine learning model.
-
-Testing data (X_test, y_test): This will be used to evaluate the model's performance.
-
-Parameters:
-
-text_tf: The feature matrix obtained from the TF-IDF transformation of the text data.
-
-data['Sentiment']: The target variable that contains sentiment labels for the text data.
-
-test_size=0.3: Specifies that 30% of the data will be used for the test set, and the remaining 70% will be used for training the model.
-
-random_state=123: Ensures that the data split is reproducible by setting a fixed seed for the random number generator.
-
-🧠 Why Split the Data?
-Training set: Used to fit and train the model so it learns patterns from the data.
-
-Test set: Used to evaluate how well the model generalizes to unseen data and checks for overfitting (whether the model has learned specific details that do not apply to new data).
-
-* 📘 Explanation:
-Importing Libraries:
-
-MultinomialNB: This is the Naive Bayes classifier, which is commonly used for text classification tasks. It works well when the features are discrete, like word counts or TF-IDF scores.
-
-metrics: This contains various functions for model evaluation. Here, we use accuracy_score to measure the accuracy of the classifier's predictions.
-
-Training the Model:
-
-clf = MultinomialNB().fit(X_train, y_train):
-
-We initialize a Multinomial Naive Bayes classifier and fit it to the training data (X_train for features, y_train for target labels).
-
-The model learns how the TF-IDF features are related to the sentiment labels.
-
-Making Predictions:
-
-predicted = clf.predict(X_test):
-
-After training, we use the classifier to predict the sentiment of the test data (X_test), which contains unseen text data.
-
-The predictions are stored in the predicted variable.
-
-Evaluating the Model:
-
-metrics.accuracy_score(y_test, predicted):
-
-This function compares the predicted labels (predicted) with the true labels (y_test) from the test set.
-
-It calculates the accuracy, which is the proportion of correct predictions out of all test samples.
-
-The accuracy is then printed, giving an indication of how well the classifier performed on the test data.
-
-🧠 Why Use Multinomial Naive Bayes for Text Classification?
-Multinomial Naive Bayes is effective for text classification, especially with high-dimensional data (e.g., many words).
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-EXTRA :-
-The NLTK (Natural Language Toolkit) is a powerful Python library used for working with human language data (text). It provides easy-to-use interfaces and tools for:
-
-Tokenization – splitting text into words or sentences
-
-Stopwords removal – filtering out common words like "the", "is", etc.
-
-Stemming is the process of reducing words to their root form by chopping off suffixes (e.g., "playing" → "play", "played" → "play"), often without considering grammar.
-
-Lemmatization also reduces words to their base or dictionary form (lemma) but considers the context and grammar (e.g., "better" → "good", "playing" → "play").
-
-POS tagging – identifying parts of speech (noun, verb, etc.)
-useful in linguistic analysis & NLP applications
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Text classification is the process of assigning predefined categories to text. Here's a short summary of the typical steps:
-
-Data Collection – Gather labeled text data (e.g., spam/ham emails).
-
-Text Preprocessing – Clean the text (remove punctuation, lowercase, tokenize, remove stopwords, etc.).
-
-Feature Extraction – Convert text into numerical form (e.g., using Bag of Words or TF-IDF).
-
-Model Training – Use machine learning algorithms (like Naive Bayes, SVM, or Logistic Regression) to train on labeled data.
-
-Model Evaluation – Test the model using metrics like accuracy, precision, recall.
-
-Prediction – Use the trained model to classify new, unseen text.
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Feature Generation using Bag of Words
-Bag of Words (BoW) is the simplest way of extracting features from the text. BoW converts text into the matrix of occurrence of words within a document. This model concerns about whether given words occurred or not in the document.
-Eg - These are three documents:
-Doc1: I love dogs.
-Doc2: I hate dogs & knitting
-Doc3: Knitting is my hobby & my passion.
-
-Now we create a matrix of document and words by counting the occurrence of words in the given document. This matrix is known as Document-Term-Matrix (DTM).
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-TF-IDF is a statistical measure that evaluates how important a word is in a document relative to a collection of documents (corpus).
-
-1.Term Frequency
-It calculates the frequency of a word in a document.
-TF = (No. of times word appears in document) / (Total words in document)
-
-2.Inverse Document Frequency
-It measures the importance of a word by reducing weight of commonly occurring words across documents.
-IDF = log ( Total number of documents / No. of documents containing word )
-
-TF-IDF normalizes the document term matrix.
-It is the product of TF and IDF. Word with high TF-IDF in a document — it is the most of the time occurred in given document and must be absent in other document.
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-1. Install Required Libraries
-Install necessary Python libraries for text processing and feature extraction like nltk and scikit-learn.
-
-Example:
-pip install nltk scikit-learn
-
-2. Import Required Modules
-Import functions for:
-
-Tokenization
-
-Stopword removal
-
-Stemming
-
-Lemmatization
-
-TF-IDF vectorization
-
-3. Load Sample Document
-Define a sample text document that will be used for preprocessing.
-
-Example:
-text = "Text preprocessing improves NLP applications and enhances feature extraction"
-
-4. Tokenization
-Break the text into tokens (individual words or sentences) to analyze them individually.
-
-Example:
-tokens = word_tokenize(text)
-
-5. POS (Part of Speech) Tagging
-Assign grammatical categories (like noun, verb, etc.) to each token for advanced processing like lemmatization.
-
-Download tagger with nltk.download('averaged_perceptron_tagger')
-
-Example:
-pos_tags = nltk.pos_tag(tokens)
-
-6. Remove Stopwords
-Eliminate commonly used words (like “the”, “is”, etc.) that don't contribute meaningful information.
-
-Example:
-filtered_words = [word for word in tokens if word.lower() not in stopwords]
-
-7. Stemming / Lemmatization
-Reduce words to their root or base form:
-
-Stemming: Removes suffixes crudely (e.g., "running" → "run")
-
-Lemmatization: Converts to proper dictionary form based on POS (e.g., "running" → "run")
-
-8. Dictionary Form Reduction
-Lemmatize or stem to unify all word variations and reduce ambiguity.
-
-Helps match similar words in different forms.
-
-9. Compute Term Frequency (TF)
-Count how often each word appears in the document.
-
-TF = (No. of times word appears) / (Total number of words)
-
-10. Compute Inverse Document Frequency (IDF)
-Measures how unique or rare a word is across multiple documents.
-
-Rare words get higher weight; common words get lower weight.
-
-11. TF-IDF Vectorization
-Combine TF and IDF to calculate the final weight of each word.
-
-Use TfidfVectorizer() from scikit-learn to automatically generate this representation.

@@ -1,77 +1,211 @@
-Data Wrangling II
-Create an “Academic performance” dataset of students and perform the following operations
-using Python.
-1. Scan all variables for missing values and inconsistencies. If there are missing values
-and/or inconsistencies, use any of the suitable techniques to deal with them.
-2. Scan all numeric variables for outliers. If there are outliers, use any of the suitable
-techniques to deal with them.
-3. Apply data transformations on at least one of the variables. The purpose of this
-transformation should be one of the following reasons: to change the scale for better
-understanding of the variable, to convert a non-linear relation into a linear one, or to
-decrease the skewness and convert the distribution into a normal distribution.
-Reason and document your approach properly.
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-* Pandas is a powerful Python library used for data manipulation, analysis, and reading/writing data in formats like CSV, Excel, JSON, SQL, etc.
-* df['math score'].fillna(value = m_v, inplace=True)
-fillna(): Replaces the NaN (missing) values in the 'math score' column with the calculated mean value m_v.
-inplace=True: Modifies the original DataFrame df directly without creating a new DataFrame.
-* min_v = df['Placement Score'].min()
-Calculates the minimum value of the 'Placement Score' column in the DataFrame df.
-The result is stored in the variable min_v.
-*df['log_math']: Refers to the 'log_math' column in the DataFrame df.
-plot(kind='hist'): This creates a histogram to visualize the distribution of values in the 'log_math' column
 
-*df['math score']: Refers to the 'math score' column in the DataFrame df.
+The code is structured to address the three requirements of the practical assignment in a logical order:
+1. **Handle Missing Values and Inconsistencies**: Cleans the dataset to ensure it’s ready for analysis.
+2. **Detect and Handle Outliers**: Identifies and caps outliers to prevent them from skewing results.
+3. **Apply Data Transformation**: Transforms the `math score` variable to reduce skewness.
 
-skew(): This function calculates the skewness of the data in the 'math score' column.
+Each section depends on the previous one:
+- **Missing value handling** ensures the data is numeric and complete, which is necessary for outlier detection and transformation.
+- **Outlier handling** ensures extreme values don’t distort the transformation (e.g., log transformation is sensitive to outliers).
+- **Transformation** relies on clean, outlier-free data to produce meaningful results.
 
-✅ Skewness Explanation:
-Skewness is a measure of the asymmetry of the distribution of values in a dataset.
+Pasting the code blocks together as a single script ensures all steps are executed in the correct order without errors. Splitting or running them separately could lead to issues (e.g., applying log transformation before cleaning 'na' values will cause errors). The code is designed to be run sequentially in one file (e.g., a `.py` script or a Jupyter Notebook cell).
 
-Positive skew: The right tail (higher values) is longer or fatter, meaning most of the data is concentrated on the left side.
+---
 
-Negative skew: The left tail (lower values) is longer or fatter, meaning most of the data is concentrated on the right side.
+### **2. Code Breakdown and Explanation**
 
-Zero skew: The distribution is approximately symmetric (e.g., normal distribution).
+Here’s the code, divided into logical sections with explanations for each. I’ll clarify what each block does, why it’s necessary, and how it contributes to the problem statement. For viva preparation, I’ll include theoretical concepts and potential questions.
+
+```python
+# Import Libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import LabelEncoder
+```
+
+- **Purpose**: Imports essential libraries for data manipulation, numerical operations, visualization, and categorical encoding.
+- **Explanation**:
+  - `pandas`: Manages data in DataFrames for easy manipulation (e.g., loading CSV, handling missing values).
+  - `numpy`: Supports numerical operations (e.g., log transformation, quantile calculations).
+  - `matplotlib.pyplot`: Creates visualizations (histograms, boxplots) to inspect distributions and outliers.
+  - `LabelEncoder`: Included for potential categorical encoding, though not used here (kept for compatibility with the original notebook).
+- **Why Keep Together?**: Imports are required for all subsequent operations. Place at the top of the script.
+- **Viva Notes**:
+  - **Question**: Why import these libraries?
+    - Answer: `pandas` for DataFrame operations, `numpy` for math, `matplotlib` for plots, and `LabelEncoder` for categorical data (though unused here).
+  - **Question**: Why is `LabelEncoder` included if not used?
+    - Answer: It was in the original notebook, possibly for future modeling. It’s safe to remove if not needed.
+- **Theoretical Concept**: Libraries provide modular functionality, reducing coding effort. `pandas` uses DataFrames, which are 2D tables similar to spreadsheets.
+
+```python
+# Load Data
+df = pd.read_csv("demo.csv")  # Or "StudentsPerformanceTest.csv"
+```
+
+- **Purpose**: Loads the `demo.csv` dataset into a `pandas` DataFrame for analysis.
+- **Explanation**:
+  - Reads the CSV file containing student performance data (`math score`, `reading score`, etc.).
+  - Creates a DataFrame (`df`) for manipulation.
+  - Note: The comment mentions `StudentsPerformanceTest.csv` due to the original notebook’s dataset. For your case, use `demo.csv`.
+- **Why Keep Together?**: Loading the data is the first step before any processing. It must precede all other blocks.
+- **Viva Notes**:
+  - **Question**: What does `pd.read_csv` do?
+    - Answer: Reads a CSV file into a DataFrame, parsing columns and rows. It handles various delimiters and missing value indicators.
+  - **Question**: What if the CSV file path is incorrect?
+    - Answer: A `FileNotFoundError` occurs. Ensure the file is in the same directory or provide the full path.
+- **Theoretical Concept**: CSV (Comma-Separated Values) is a simple file format for tabular data. `pandas` automatically infers column names and data types.
+
+```python
+# 1. Handle Missing Values and Inconsistencies
+# Convert 'na' to NaN
+df = df.replace('na', np.nan)
+# Check missing values
+print("Missing Values:\n", df.isnull().sum())
+# Impute numeric columns with mean
+numeric_cols = ['math score', 'reading score', 'writing score', 'placement score']
+df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+# Verify data types
+df[numeric_cols] = df[numeric_cols].apply(pd.to_numeric, errors='coerce')
+print("Data Types:\n", df.dtypes)
+```
+
+- **Purpose**: Cleans the dataset by handling missing values and ensuring numeric columns are correctly formatted.
+- **Explanation**:
+  - **`df.replace('na', np.nan)`**: Converts any 'na' strings to `NaN` (pandas’ missing value indicator). This is crucial because `demo.csv` may not have 'na', but the original notebook’s dataset did.
+  - **`df.isnull().sum()`**: Counts missing values (`NaN`) per column and prints the result. For `demo.csv`, this should show 0 missing values unless implicit errors exist.
+  - **`df[numeric_cols].fillna(df[numeric_cols].mean())`**: Imputes missing values in numeric columns (`math score`, etc.) with their respective means. This preserves data for analysis.
+  - **`df[numeric_cols].apply(pd.to_numeric, errors='coerce')`**: Ensures columns are numeric, converting non-numeric values to `NaN`. This handles any remaining inconsistencies.
+  - **`df.dtypes`**: Prints data types to verify all numeric columns are `float64` or `int64`.
+- **Why Keep Together?**: These steps form a pipeline to clean the data. Missing values and inconsistencies must be resolved before outlier detection or transformation to avoid errors (e.g., non-numeric values in `math score`).
+- **Contribution to Problem Statement**: Addresses the requirement to “scan for missing values and inconsistencies” and “use suitable techniques” (mean imputation, type conversion).
+- **Viva Notes**:
+  - **Question**: Why convert 'na' to `NaN`?
+    - Answer: 'na' is a string, treated as valid data. Converting to `NaN` allows `pandas` to recognize it as missing for imputation.
+  - **Question**: Why use mean imputation?
+    - Answer: Mean imputation is simple and preserves the column’s central tendency. Alternatives include median (robust to outliers) or dropping rows (if few missing values).
+  - **Question**: What does `pd.to_numeric` do?
+    - Answer: Converts a column to numeric type, with `errors='coerce'` turning invalid values (e.g., strings) to `NaN`.
+- **Theoretical Concept**:
+  - **Missing Values**: Can bias analyses or cause errors. Imputation assumes missingness is random (MCAR/MAR).
+  - **Inconsistencies**: Non-numeric values in numeric columns disrupt calculations. Type coercion ensures data integrity.
+  - **Mean Imputation**: Replaces missing values with the column mean, but can reduce variance. Median is preferred for skewed data.
+
+```python
+# 2. Detect and Handle Outliers
+# IQR method for 'math score'
+Q1 = df['math score'].quantile(0.25)
+Q3 = df['math score'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+outliers = df[(df['math score'] < lower_bound) | (df['math score'] > upper_bound)]
+print("Outliers in math score:\n", outliers)
+# Cap outliers
+df['math score'] = df['math score'].clip(lower=lower_bound, upper=upper_bound)
+# Visualize
+plt.boxplot(df['math score'].dropna())
+plt.title("Math Score After Outlier Handling")
+plt.show()
+```
+
+- **Purpose**: Identifies and handles outliers in `math score` using the Interquartile Range (IQR) method.
+- **Explanation**:
+  - **`Q1 = df['math score'].quantile(0.25)`**: Calculates the 25th percentile (first quartile).
+  - **`Q3 = df['math score'].quantile(0.75)`**: Calculates the 75th percentile (third quartile).
+  - **`IQR = Q3 - Q1`**: Computes the interquartile range, a measure of spread.
+  - **`lower_bound = Q1 - 1.5 * IQR`**: Defines the lower threshold for outliers.
+  - **`upper_bound = Q3 + 1.5 * IQR`**: Defines the upper threshold for outliers.
+  - **`outliers = df[(df['math score'] < lower_bound) | (df['math score'] > upper_bound)]`**: Filters rows where `math score` is an outlier (e.g., 160, 180 in `demo.csv`).
+  - **`print("Outliers in math score:\n", outliers)`**: Displays outliers for inspection.
+  - **`df['math score'].clip(lower=lower_bound, upper=upper_bound)`**: Caps outliers by replacing values below `lower_bound` with `lower_bound` and above `upper_bound` with `upper_bound`.
+  - **`plt.boxplot(df['math score'].dropna())`**: Visualizes the distribution post-capping. `dropna()` ensures no `NaN` values are plotted.
+- **Why Keep Together?**: Outlier detection (IQR calculation) and handling (capping) are sequential. Visualization confirms the result. This block relies on clean numeric data from the previous block.
+- **Contribution to Problem Statement**: Addresses the requirement to “scan numeric variables for outliers” and “use suitable techniques” (IQR detection, capping).
+- **Viva Notes**:
+  - **Question**: What is the IQR method?
+    - Answer: IQR is the range between Q3 and Q1. Outliers are values outside `[Q1 - 1.5*IQR, Q3 + 1.5*IQR]`. It’s robust to non-normal data.
+  - **Question**: Why cap outliers instead of removing them?
+    - Answer: Capping retains data points, replacing extreme values with boundary values. Removal reduces sample size, which may be problematic for small datasets.
+  - **Question**: Why focus on `math score`?
+    - Answer: It’s a key numeric variable, and the problem requires transforming at least one variable. Other scores could also be checked.
+- **Theoretical Concept**:
+  - **Outliers**: Extreme values that deviate significantly, potentially skewing analyses.
+  - **IQR Method**: A non-parametric approach to identify outliers, suitable for skewed data.
+  - **Capping**: Limits extreme values to maintain data integrity without loss.
+
+```python
+# 3. Data Transformation
+# Log transformation to reduce skewness
+df['log_math'] = np.log10(df['math score'] + 1)  # Add 1 to handle zeros
+# Visualize before and after
+fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+df['math score'].plot(kind='hist', ax=axes[0], title='Math Score')
+df['log_math'].plot(kind='hist', ax=axes[1], title='Log Math Score')
+plt.show()
+# Skewness
+print("Skewness Before:", df['math score'].skew())
+print("Skewness After:", df['log_math'].skew())
+```
+
+- **Purpose**: Applies a log transformation to `math score` to reduce skewness and visualizes the result.
+- **Explanation**:
+  - **`df['log_math'] = np.log10(df['math score'] + 1)`**: Applies a base-10 logarithm to `math score` after adding 1 to handle potential zeros (log(0) is undefined). This compresses large values and reduces right-skewness.
+  - **`fig, axes = plt.subplots(1, 2, figsize=(10, 4))`**: Creates a figure with two subplots for side-by-side histograms.
+  - **`df['math score'].plot(kind='hist', ax=axes[0], title='Math Score')`**: Plots the original `math score` distribution.
+  - **`df['log_math'].plot(kind='hist', ax=axes[1], title='Log Math Score')`**: Plots the transformed distribution.
+  - **`plt.show()`**: Displays the plots.
+  - **`df['math score'].skew()`**: Calculates skewness of the original `math score` (positive indicates right skew).
+  - **`df['log_math'].skew()`**: Calculates skewness of the transformed variable (should be closer to 0 if successful).
+- **Why Keep Together?**: Transformation, visualization, and skewness calculation are interconnected to evaluate the transformation’s effectiveness. This block relies on clean, outlier-free data.
+- **Contribution to Problem Statement**: Addresses the requirement to “apply data transformations” to “decrease skewness and convert the distribution into a normal distribution.”
+- **Viva Notes**:
+  - **Question**: Why use log transformation?
+    - Answer: Log transformation reduces right-skewness by compressing large values, making the distribution more normal, which is useful for statistical analyses.
+  - **Question**: Why add 1 before `log10`?
+    - Answer: Log of zero is undefined, and negative values are invalid. Adding 1 ensures all values are positive and non-zero.
+  - **Question**: How does skewness indicate transformation success?
+    - Answer: Skewness near 0 suggests a symmetric, normal-like distribution. A reduction (e.g., from 2 to 0.5) shows improvement.
+- **Theoretical Concept**:
+  - **Skewness**: Measures distribution asymmetry. Positive skew indicates a long right tail; log transformation reduces this.
+  - **Log Transformation**: Converts multiplicative relationships to additive ones and stabilizes variance.
+  - **Normality**: Many statistical methods assume normal data, which transformations help achieve.
+
+---
 
 
+### **6. Viva Preparation Tips**
 
+- **Missing Values**:
+  - Explain: `isnull()` detects `NaN`; `replace('na', np.nan)` handles string placeholders.
+  - Why Mean Imputation? Preserves data but assumes missingness is random.
+  - Alternative: Median imputation or dropping rows.
+- **Outliers**:
+  - Explain: IQR identifies outliers robustly. Capping retains data points.
+  - Alternative: Remove outliers or use Z-score.
+  - Why `math score`? Key variable with potential outliers (e.g., 160, 180 in `demo.csv`).
+- **Transformation**:
+  - Explain: Log transformation reduces right-skewness, aiding normality.
+  - Why Add 1? Prevents log(0) errors.
+  - Alternative: Square root, Box-Cox.
+- **Visualization**:
+  - Explain: Boxplots show outliers; histograms show distribution changes.
+  - Why Two Histograms? Compare skewness before and after transformation.
+- **Code Structure**:
+  - Explain: Sequential blocks ensure data is clean before analysis.
+  - Why Together? Prevents errors (e.g., log on non-numeric data).
+- **Dataset**:
+  - Explain: Code works for `demo.csv` but can adapt to other datasets.
+  - Issue: Original notebook’s dataset mismatch; this code resolves it.
 
+**Sample Viva Questions**:
+- What happens if you skip missing value handling?
+  - Errors in numeric operations (e.g., log transformation).
+- Why not remove outliers?
+  - Reduces sample size, which may affect analysis.
+- How do you verify transformation success?
+  - Reduced skewness and more symmetric histogram.
 
-
-
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Techniques to Handle Null Values
-Imputation Methods
-
-Mean Imputation:
-Best for numerical data with normal distribution.
-df['column'].fillna(df['column'].mean(), inplace=True)
-
-Median Imputation:
-More suitable for skewed numerical data.
-df['column'].fillna(df['column'].median(), inplace=True)
-
-Mode Imputation:
-Used for categorical data.
-df['column'].fillna(df['column'].mode()[0], inplace=True)
-
-Identification of Null Values
-Use the isnull() function to detect null values:
-df.isnull().sum()  # Counts null values per column
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Algorithm :-
-1. Data Loading: Import dataset using pandas
-
-2. Null Value Treatment:
-Detection with isnull().sum()
-Imputation using mean/median
-
-3. Outlier Management:
-Visualization with boxplots
-Removal via Z-score (|Z| > 3)
-Transformation using log10
-
-4.Result Verification:
-Comparative histogram visualization
+---
 

@@ -1,0 +1,196 @@
+Since you’ve requested the complete fixed code for the Descriptive Statistics practical, I’ll provide a comprehensive Python script that fully addresses the problem statement based on the provided datasets (`Mall_Customers.csv` and `Iris.csv`) and the requirements outlined in the practical. Following the initial prompt’s structure, I’ll ensure the code solves both tasks, explain its components for a novice audience, and confirm it aligns with the problem statement. The code will be wrapped in an `<xaiArtifact>` tag as per the artifact guidelines, using a new UUID since this is a new artifact unrelated to previous ones. I’ll also include setup requirements and viva preparation tips without execution steps, as requested.
+
+### **Problem Statement Recap**
+1. **Summary Statistics by Categorical Variable**:
+   - Compute summary statistics (mean, median, minimum, maximum, standard deviation) for numeric variables in a dataset (e.g., `Age`, `Income`, `Spending Score (1-100)` in `Mall_Customers.csv`), grouped by a categorical variable (e.g., `Genre`).
+   - Create a list of numeric values for each response to the categorical variable (e.g., encode `Genre` as 0 for Female, 1 for Male).
+2. **Statistical Details for Iris Species**:
+   - Display basic statistical details (percentile, mean, standard deviation, etc.) for numeric variables (`SepalLengthCm`, `SepalWidthCm`, `PetalLengthCm`, `PetalWidthCm`) in `Iris.csv`, grouped by `Species` (`Iris-setosa`, `Iris-versicolor`, `Iris-virginica`).
+
+### **Evaluation of Provided Code**
+The provided `index.ipynb` partially solves the problem:
+- **Task 1**: Computes overall statistics and mean `Age` by `Genre` but lacks grouped statistics for other numeric variables (`Income`, `Spending Score`) and metrics (median, min, max, std). The one-hot encoding of `Genre` is overly complex, and no explicit list of numeric values is provided.
+- **Task 2**: Fully solves the requirement using `describe()` for each species, but includes the irrelevant `Id` column and has a typo in the problem statement (repeating `Iris-versicolor`).
+
+The fixed code below addresses these issues by:
+- Providing comprehensive grouped statistics for Task 1.
+- Creating a clear list of encoded categorical values.
+- Excluding irrelevant columns (`CustomerID`, `Id`).
+- Simplifying encoding with `LabelEncoder`.
+- Correctly handling all Iris species.
+
+
+### **Explanation of the Code**
+
+#### **Overview**
+- **Purpose**: The script performs descriptive statistics for two datasets, meeting both tasks of the practical.
+- **Structure**:
+  - **Imports**: Libraries for data manipulation, numerical operations, and encoding.
+  - **Task 1**: Processes `Mall_Customers.csv` for grouped statistics and categorical encoding.
+  - **Task 2**: Processes `Iris.csv` for species-specific statistics.
+- **Key Fixes**:
+  - Comprehensive grouped statistics for all numeric variables in Task 1.
+  - Explicit list of encoded `Genre` values.
+  - Excludes irrelevant columns (`CustomerID`, `Id`).
+  - Simplifies encoding with `LabelEncoder`.
+  - Clear, formatted output for easy interpretation.
+
+#### **Code Breakdown**
+1. **Imports**:
+   ```python
+   import pandas as pd
+   import numpy as np
+   from sklearn.preprocessing import LabelEncoder
+   ```
+   - **Purpose**: `pandas` for DataFrames, `numpy` for numerical operations, `LabelEncoder` for categorical encoding.
+   - **Viva Note**: Explain `pandas` handles tabular data, `numpy` supports math, and `LabelEncoder` converts categories to integers (e.g., `Female: 0`, `Male: 1`).
+
+2. **Task 1: Mall_Customers.csv**
+   - **Load and Rename**:
+     ```python
+     df = pd.read_csv("Mall_Customers.csv")
+     df = df.rename(columns={'Annual Income (k$)': 'Income'}, inplace=False)
+     ```
+     - **Purpose**: Loads the dataset and renames `Annual Income (k$)` to `Income` for clarity.
+     - **Viva Note**: `read_csv` parses CSV into a DataFrame. `rename` improves readability without modifying data (`inplace=False` creates a new DataFrame).
+   - **Define Columns**:
+     ```python
+     numeric_cols = ['Age', 'Income', 'Spending Score (1-100)']
+     cat_col = 'Genre'
+     ```
+     - **Purpose**: Specifies numeric variables for statistics and the categorical variable for grouping.
+     - **Viva Note**: Excludes `CustomerID` as it’s an identifier, not a meaningful variable.
+   - **Grouped Statistics**:
+     ```python
+     grouped_stats = df.groupby(cat_col)[numeric_cols].agg(['mean', 'median', 'min', 'max', 'std'])
+     print("\nSummary Statistics Grouped by Genre:")
+     print(grouped_stats)
+     ```
+     - **Purpose**: Groups data by `Genre` and computes mean, median, min, max, and standard deviation for `Age`, `Income`, and `Spending Score`.
+     - **Details**:
+       - `groupby(cat_col)`: Splits data into `Male` and `Female` groups.
+       - `agg(['mean', 'median', 'min', 'max', 'std'])`: Applies multiple functions to each numeric column.
+       - Output is a multi-index DataFrame showing statistics for each group.
+     - **Viva Note**:
+       - **Question**: How does `groupby` work?
+         - Answer: Splits data by unique `Genre` values, applies functions to each group’s numeric columns.
+       - **Question**: Why use `agg`?
+         - Answer: Allows multiple statistics in one operation, producing a comprehensive summary.
+   - **Categorical Encoding**:
+     ```python
+     le = LabelEncoder()
+     df['Genre_encoded'] = le.fit_transform(df[cat_col])
+     category_mapping = dict(zip(le.classes_, le.transform(le.classes_)))
+     print("\nNumeric Encoding for Genre:")
+     print(category_mapping)
+     numeric_values = df['Genre_encoded'].tolist()
+     print("\nList of Numeric Values for Genre (first 10 shown):")
+     print(numeric_values[:10], "...")
+     ```
+     - **Purpose**: Encodes `Genre` as numeric values (0: Female, 1: Male) and creates a list of these values for each row.
+     - **Details**:
+       - `LabelEncoder`: Assigns integers to unique categories.
+       - `fit_transform`: Fits the encoder and transforms `Genre` to numeric.
+       - `category_mapping`: Dictionary mapping categories to numbers (e.g., `{'Female': 0, 'Male': 1}`).
+       - `numeric_values`: List of encoded values for all rows.
+       - Shows first 10 values to avoid clutter.
+     - **Viva Note**:
+       - **Question**: Why use `LabelEncoder` instead of one-hot encoding?
+         - Answer: Simpler for creating a single numeric column; one-hot encoding creates multiple columns, unnecessary here.
+       - **Question**: What does the numeric list represent?
+         - Answer: Encoded `Genre` for each customer, useful for modeling or analysis.
+
+3. **Task 2: Iris.csv**
+   - **Load Data**:
+     ```python
+     iris = pd.read_csv("Iris.csv")
+     numeric_cols_iris = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']
+     ```
+     - **Purpose**: Loads `Iris.csv` and defines numeric measurement columns, excluding `Id`.
+     - **Viva Note**: Explain `Id` is an identifier, irrelevant for statistical analysis.
+   - **Statistics by Species**:
+     ```python
+     for species in ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']:
+         print(f"\nStatistics for {species}:")
+         stats = iris[iris['Species'] == species][numeric_cols_iris].describe()
+         print(stats)
+     ```
+     - **Purpose**: Computes descriptive statistics (count, mean, std, min, 25%, 50%, 75%, max) for each species’ measurements.
+     - **Details**:
+       - Loops over species for concise code.
+       - `iris['Species'] == species`: Filters rows for the current species.
+       - `describe()`: Provides all required statistics, including percentiles.
+       - Excludes `Id` by using `numeric_cols_iris`.
+     - **Viva Note**:
+       - **Question**: What does `describe()` output?
+         - Answer: Count, mean, std, min, max, and percentiles (25%, 50%, 75%) for numeric columns.
+       - **Question**: Why loop over species?
+         - Answer: Avoids repetitive code; each species gets its own statistics table.
+
+#### **Expected Output**
+- **Task 1**:
+  - A table showing mean, median, min, max, and std for `Age`, `Income`, `Spending Score` for `Female` and `Male`.
+  - Dictionary: `{'Female': 0, 'Male': 1}`.
+  - List: `[1, 1, 0, 0, 0, ...]` (first 10 values shown).
+- **Task 2**:
+  - Three tables, one per species, showing statistics for `SepalLengthCm`, `SepalWidthCm`, `PetalLengthCm`, `PetalWidthCm`.
+  - Example for `Iris-setosa`:
+    ```
+    Statistics for Iris-setosa:
+           SepalLengthCm  SepalWidthCm  PetalLengthCm  PetalWidthCm
+    count      50.000000     50.000000      50.000000     50.000000
+    mean        5.006000      3.418000       1.464000      0.244000
+    std         0.352490      0.381024       0.173511      0.107210
+    min         4.300000      2.300000       1.000000      0.100000
+    25%         4.800000      3.125000       1.400000      0.200000
+    50%         5.000000      3.400000       1.500000      0.200000
+    75%         5.200000      3.675000       1.575000      0.300000
+    max         5.800000      4.400000       1.900000      0.600000
+    ```
+
+### **How the Code Solves the Problem Statement**
+1. **Task 1**:
+   - **Grouped Statistics**: Computes all required metrics (mean, median, min, max, std) for `Age`, `Income`, `Spending Score` by `Genre`, fulfilling the summary statistics requirement.
+   - **Numeric List**: Provides a dictionary and list of encoded `Genre` values, meeting the categorical encoding requirement.
+   - **Improvements**: Excludes `CustomerID`, uses `LabelEncoder` for simplicity, and formats output clearly.
+2. **Task 2**:
+   - **Species Statistics**: Uses `describe()` to provide percentiles, mean, std, min, max for each species’ measurements, fully meeting the requirement.
+   - **Improvements**: Excludes `Id`, uses a loop for efficiency, and corrects the typo in the problem statement by including `Iris-virginica`.
+
+
+### **Viva Preparation Tips**
+- **Task 1**:
+  - **Grouping**:
+    - Explain: `groupby('Genre')` splits data into `Male` and `Female`, and `agg` applies multiple functions.
+    - **Question**: Why use `agg` over separate calls?
+      - Answer: Efficiently computes multiple statistics in one operation.
+  - **Encoding**:
+    - Explain: `LabelEncoder` assigns integers to categories (e.g., `Female: 0`, `Male: 1`).
+    - **Question**: Why not one-hot encoding?
+      - Answer: One-hot creates multiple columns; `LabelEncoder` is simpler for a single numeric list.
+  - **Statistics**:
+    - Define: Mean (average), median (middle), std (spread), min/max (range).
+    - **Question**: Why exclude `CustomerID`?
+      - Answer: It’s an identifier, not a variable for analysis.
+- **Task 2**:
+  - **Filtering**:
+    - Explain: `iris['Species'] == species` creates a boolean mask to select rows.
+    - **Question**: Why use a loop?
+      - Answer: Reduces repetitive code for each species.
+  - **Describe**:
+    - Explain: `describe()` provides count, mean, std, min, max, percentiles.
+    - **Question**: What do percentiles indicate?
+      - Answer: Distribution spread (e.g., 25% of data below 25th percentile).
+  - **Exclusions**:
+    - **Question**: Why exclude `Id`?
+      - Answer: It’s an identifier, not a measurement.
+- **General**:
+  - **Libraries**: `pandas` for DataFrames, `numpy` for math, `sklearn` for encoding.
+  - **Datasets**:
+    - `Mall_Customers.csv`: Customer data for segmentation.
+    - `Iris.csv`: Plant measurements for classification.
+  - **Question**: Why use `pandas`?
+    - Answer: Efficient for tabular data with built-in statistical functions.
+  - **Question**: How to handle missing values?
+    - Answer: Check with `df.isnull().sum()`; none in these datasets, but could impute or drop if present.
+

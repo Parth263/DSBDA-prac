@@ -1,82 +1,246 @@
-A. x_scaled = min_max_scaler.fit_transform(x)
-i min_max_scaler: a MinMaxScaler object from sklearn.preprocessing.
 
-ii .fit_transform(x):
-fit: computes the min and max values of each feature (column).
-transform: scales each value to a 0–1 range
 
-B. df_normalized = pd.DataFrame(x_scaled)
+**Practical Statement**:  
+Perform data wrangling operations on an open-source dataset (e.g., Iris from Kaggle) using Python. The tasks include:
+1. Importing required Python libraries.
+2. Locating and describing an open-source dataset.
+3. Loading the dataset into a Pandas DataFrame.
+4. Preprocessing the data (checking for missing values, generating initial statistics, describing variables, and checking dimensions).
+5. Formatting and normalizing data (checking data types, converting if needed, and summarizing variable types).
+6. Converting categorical variables into quantitative variables.
+
+**Objectives**:  
+- Learn **data wrangling** (cleaning, organizing, and transforming raw data for analysis).
+- Understand how to use Python libraries like **Pandas**, **NumPy**, and **scikit-learn** for data manipulation.
+- Prepare the dataset for machine learning by handling missing values, normalizing numerical data, and encoding categorical variables.
+- Gain hands-on experience with tools like VS Code and Google Colab.
+
+**Underlying Concepts**:  
+- **Data Wrangling**: The process of cleaning, structuring, and transforming raw data into a usable format. It’s crucial because real-world data is often messy (missing values, inconsistent formats, etc.).
+- **Pandas DataFrame**: A 2D table (like a spreadsheet) for storing and manipulating data.
+- **Data Preprocessing**: Checking for missing values, summarizing data, and ensuring data is in the right format for analysis.
+- **Data Normalization**: Scaling numerical data to a specific range (e.g., 0 to 1) to ensure fair comparisons in machine learning.
+- **Categorical Encoding**: Converting non-numerical (categorical) data into numerical formats for machine learning algorithms.
+
+---
+
+### 2. Review of Provided Materials
+
+**CSV File (Iris.csv)**:  
+- **Description**: The Iris dataset contains measurements of sepal length, sepal width, petal length, and petal width (in cm) for 150 iris flowers, belonging to three species: Iris-setosa, Iris-versicolor, and Iris-virginica. It also includes an `Id` column.
+- **Source**: Kaggle (https://www.kaggle.com/datasets/uciml/iris).
+- **Columns**:
+  - `Id`: Unique identifier (integer).
+  - `SepalLengthCm`, `SepalWidthCm`, `PetalLengthCm`, `PetalWidthCm`: Numerical measurements (float).
+  - `Species`: Categorical (string, one of three species).
+- **Issues**: No missing values (confirmed by `df.isnull().sum()`). The CSV is clean and well-structured.
+
+**Notebook (index.ipynb)**:  
+- **Content**: The notebook performs data wrangling tasks:
+  - Loads the dataset using Pandas.
+  - Checks for missing values and provides summary statistics.
+  - Normalizes numerical columns using Min-Max scaling.
+  - Encodes the categorical `Species` column using **LabelEncoder** and **OneHotEncoder**.
+  - Demonstrates alternative encoding with `pd.get_dummies`.
+- **Issues**:
+  - The code contains an error in one cell: `df['species'].unique()` (lowercase `species`) should be `df['Species'].unique()` (uppercase `S`), as the column name is `Species`.
+  - The column selection in `x = df.iloc[:,:4]` excludes `PetalWidthCm` for normalization, which might be intentional but seems inconsistent since all numerical features are typically normalized.
+  - The table describing variable names (`sepal length (cm)`, etc.) doesn’t match the CSV column names (`SepalLengthCm`, etc.), which could cause confusion.
+  - Some execution outputs are missing or inconsistent (e.g., `df.shape` and `one_hot_df` outputs are incomplete or incorrect).
+
+**Fixes**:  
+- Correct `df['species'].unique()` to `df['Species'].unique()`.
+- Consider including `PetalWidthCm` in normalization for consistency.
+- Align variable names in the documentation with the CSV column names.
+- Ensure all cells are executed in order to avoid missing outputs.
+
+---
+
+### 3. Theoretical Aspects
+
+Here’s a beginner-friendly explanation of the key concepts related to the practical:
+
+1. **Data Wrangling**:  
+   - **What**: Cleaning and transforming raw data to make it usable for analysis.  
+   - **Why**: Raw data often has missing values, incorrect formats, or inconsistencies that can lead to wrong conclusions.  
+   - **Example**: Removing missing values or converting text categories (e.g., "Iris-setosa") to numbers.
+
+2. **Pandas and NumPy**:  
+   - **Pandas**: A Python library for handling tabular data. A **DataFrame** is like an Excel table with rows and columns.  
+   - **NumPy**: A library for numerical operations, used here for array-based calculations (e.g., during normalization).  
+   - **Example**: `df.head()` shows the first 5 rows of the DataFrame, and `np.array` converts data to a numerical format.
+
+3. **Data Preprocessing**:  
+   - **Missing Values**: Use `df.isnull().sum()` to count missing entries per column. Missing data can skew analysis if not handled.  
+   - **Summary Statistics**: `df.describe()` provides metrics like mean, min, max, and quartiles for numerical columns.  
+   - **Dimensions**: `df.shape` gives the number of rows and columns (e.g., 150 rows, 6 columns).  
+   - **Variable Types**:  
+     - **Numerical (Continuous)**: `SepalLengthCm`, `SepalWidthCm`, etc. (float64).  
+     - **Categorical**: `Species` (object/string, with values like "Iris-setosa").  
+     - **Integer**: `Id` (int64, unique identifier).
+
+4. **Data Normalization**:  
+   - **What**: Scaling numerical data to a range (e.g., 0 to 1) using the **Min-Max Scaling** formula:  
+     \[
+     X' = \frac{X - \text{min}(X)}{\text{max}(X) - \text{min}(X)}
+     \]  
+   - **Why**: Ensures all features contribute equally to machine learning models, as different scales (e.g., 1-10 vs. 100-1000) can bias results.  
+   - **Example**: Scaling `SepalLengthCm` (range 4.3–7.9 cm) to 0–1.
+
+5. **Categorical Encoding**:  
+   - **What**: Converting categorical data (e.g., "Iris-setosa") to numbers because machine learning models require numerical inputs.  
+   - **Methods**:  
+     - **Label Encoding**: Assigns integers to categories (e.g., Iris-setosa = 0, Iris-versicolor = 1, Iris-virginica = 2).  
+     - **One-Hot Encoding**: Creates binary columns for each category (e.g., `Iris-Setosa`, `Iris-Versicolor`, `Iris-Virginica` with 0s and 1s).  
+     - **pd.get_dummies**: A Pandas method for one-hot encoding, with an option to drop the first category to avoid redundancy.  
+   - **Why**: Enables algorithms to process categorical data. One-hot encoding is preferred for non-ordinal categories to avoid implying order.
+
+---
+
+
+
+
+### 5. Code Segments and Viva Preparation
+
+Here’s a breakdown of the key code segments, their purpose, and explanations for your viva. I’ve corrected errors and provided concise explanations.
+
+**1. Importing Libraries**  
+```python
+import pandas as pd
+import numpy as np
+from sklearn import preprocessing
+```
+- **Purpose**: Loads libraries for data manipulation (`pandas`), numerical operations (`numpy`), and preprocessing (`sklearn.preprocessing` for scaling and encoding).  
+- **Viva Explanation**: "I imported Pandas to handle the dataset as a DataFrame, NumPy for array operations, and scikit-learn’s preprocessing module for normalization and encoding categorical variables."
+
+**2. Loading the Dataset**  
+```python
+df = pd.read_csv("./Iris.csv")
+df.head()
+```
+- **Purpose**: Reads `Iris.csv` into a Pandas DataFrame and displays the first 5 rows.  
+- **Output**: Shows columns `Id`, `SepalLengthCm`, `SepalWidthCm`, `PetalLengthCm`, `PetalWidthCm`, `Species`.  
+- **Viva Explanation**: "I used `pd.read_csv()` to load the Iris dataset, which contains 150 rows of flower measurements. `df.head()` helps verify the data loaded correctly."
+
+**3. Checking Dimensions**  
+```python
+print(df.shape)  # (150, 6)
+```
+- **Purpose**: Shows the DataFrame’s size (150 rows, 6 columns).  
+- **Viva Explanation**: "The dataset has 150 rows (one per flower) and 6 columns (Id, 4 numerical features, and Species). `df.shape` confirms the dataset’s dimensions."
+
+**4. Checking Missing Values**  
+```python
+df.isnull().sum()  # All zeros
+```
+- **Purpose**: Counts missing values per column (none in this case).  
+- **Viva Explanation**: "I used `df.isnull().sum()` to check for missing data. The Iris dataset is clean, with no missing values, which simplifies preprocessing."
+
+**5. Summary Statistics**  
+```python
+df.describe()  # Numerical columns only
+df.describe(include='all')  # Includes categorical columns
+```
+- **Purpose**: Provides statistics (count, mean, std, min, max, quartiles) for numerical columns. `include='all'` adds categorical column stats (e.g., unique values for `Species`).  
+- **Viva Explanation**: "`df.describe()` gives insights into numerical features, like the average sepal length (5.84 cm). `include='all'` shows that `Species` has 3 unique values, each appearing 50 times."
+
+**6. Checking Data Types**  
+```python
+df.dtypes
+# Output:
+# Id                int64
+# SepalLengthCm    float64
+# SepalWidthCm     float64
+# PetalLengthCm    float64
+# PetalWidthCm     float64
+# Species           object
+```
+- **Purpose**: Lists data types of each column.  
+- **Viva Explanation**: "I used `df.dtypes` to check variable types. `Id` is an integer, measurements are floats (continuous), and `Species` is an object (categorical string). All types are correct, so no conversion was needed."
+
+**7. Min-Max Normalization**  
+```python
+min_max_scaler = preprocessing.MinMaxScaler()
+x = df.iloc[:,1:5]  # Select numerical columns (corrected)
+x_scaled = min_max_scaler.fit_transform(x)
+df_normalized = pd.DataFrame(x_scaled)
 df_normalized
-pd.DataFrame(x_scaled):
-Converts the NumPy array x_scaled (from MinMaxScaler) back into a Pandas DataFrame.
+```
+- **Purpose**: Scales numerical columns (`SepalLengthCm`, `SepalWidthCm`, `PetalLengthCm`, `PetalWidthCm`) to the range 0–1.  
+- **Correction**: Changed `df.iloc[:,:4]` to `df.iloc[:,1:5]` to include all numerical features.  
+- **Output**: A DataFrame with scaled values (e.g., 0.222 for `SepalLengthCm` = 5.1 cm).  
+- **Viva Explanation**: "I used `MinMaxScaler` to normalize numerical features to 0–1, which is important for machine learning to ensure all features contribute equally. The formula is \( X' = \frac{X - \text{min}(X)}{\text{max}(X) - \text{min}(X)} \)."
 
-df_normalized:
-A new DataFrame where each feature (column) is normalized to a range between 0 and 1.
+**8. Label Encoding**  
+```python
+label_encoder = preprocessing.LabelEncoder()
+df['Species'] = label_encoder.fit_transform(df['Species'])
+df['Species'].unique()  # [0, 1, 2]
+```
+- **Purpose**: Converts `Species` (e.g., "Iris-setosa") to integers (0, 1, 2).  
+- **Viva Explanation**: "I used `LabelEncoder` to convert the categorical `Species` column to numerical values (e.g., Iris-setosa = 0). This is useful for some machine learning models but assumes an ordinal relationship, which may not always be appropriate."
 
-df_normalized (last line):
-Displays the contents of the normalized DataFrame in a notebook or console.
+**9. One-Hot Encoding (scikit-learn)**  
+```python
+enc = preprocessing.OneHotEncoder()
+enc_df = pd.DataFrame(enc.fit_transform(df[['Species']]).toarray())
+df_encode = features_df.join(enc_df)
+df_encode.rename(columns={0:'Iris-Setosa', 1:'Iris-Versicolor', 2:'Iris-virginica'}, inplace=True)
+df_encode
+```
+- **Purpose**: Converts `Species` into three binary columns (`Iris-Setosa`, `Iris-Versicolor`, `Iris-virginica`).  
+- **Output**: A DataFrame with original features plus three new columns (e.g., `[1, 0, 0]` for Iris-setosa).  
+- **Viva Explanation**: "I used `OneHotEncoder` to create binary columns for each species, which is ideal for non-ordinal categorical data. Each row has a 1 in the column corresponding to its species and 0s elsewhere."
 
-C. i. label_encoder = preprocessing.LabelEncoder()  
-Creates an instance of LabelEncoder from sklearn.preprocessing.
-This encoder converts categorical (text) labels into numeric codes.
+**10. One-Hot Encoding (Pandas)**  
+```python
+one_hot_df = pd.get_dummies(df, prefix="Species", columns=['Species'], drop_first=True)
+one_hot_df
+```
+- **Purpose**: Creates two binary columns (`Species_1`, `Species_2`) for `Species`, dropping the first category (Iris-setosa) to avoid redundancy.  
+- **Issue**: The output shows `False`/`True` instead of 0/1 due to Pandas’ default behavior. Convert to integers:  
+  ```python
+  one_hot_df[['Species_1', 'Species_2']] = one_hot_df[['Species_1', 'Species_2']].astype(int)
+  ```
+- **Viva Explanation**: "I used `pd.get_dummies` for one-hot encoding, dropping the first category to reduce redundancy (dummy variable trap). This creates two columns for three species, where `Species_1` = 1 means Iris-versicolor, and `Species_2` = 1 means Iris-virginica."
 
-ii. df['Species'] = label_encoder.fit_transform(df['Species'])  
-* Takes the 'Species' column (which contains text labels like 'setosa', 'versicolor', etc.).
-* Applies fit_transform(), which:
-    fit(): identifies unique categories.
-    transform(): replaces each label with a corresponding integer (e.g., 'setosa' → 0, 'versicolor' → 1, etc.).
+**Error Cell (Corrected)**:  
+```python
+df['Species'].unique()  # Was df['species'].unique()
+```
+- **Purpose**: Lists unique values in `Species` (0, 1, 2 after encoding).  
+- **Correction**: Fixed column name to `Species`.  
+- **Viva Explanation**: "This cell confirms the `Species` column was encoded correctly, showing unique values [0, 1, 2]."
 
-* The transformed numeric labels are then assigned back to the 'Species' column in the DataFrame
+---
 
-D. features_df = df.drop(columns=['Species'])
-df.drop(columns=['Species']):
-Removes the 'Species' column from the DataFrame df.
-This is typically done when you want a features-only DataFrame (excluding the target/label column).
+### 6. Issues with Code and CSV
 
-features_df:
-Stores the resulting DataFrame that contains only the input features (independent variables).
+**CSV Issues**:  
+- None. The Iris dataset is clean, with no missing values or formatting errors.
 
-E. enc = preprocessing.OneHotEncoder()
-Creates an instance of OneHotEncoder from sklearn.preprocessing.
-OneHotEncoder transforms categorical values into binary vectors (e.g., 'setosa' → [1 0 0], 'versicolor' → [0 1 0], etc.).
+**Code Issues**:  
+- **Case Sensitivity**: `df['species'].unique()` should be `df['Species'].unique()`.  
+- **Normalization Scope**: Excluding `PetalWidthCm` in `x = df.iloc[:,:4]` may be intentional but seems incomplete. Suggested fix: `x = df.iloc[:,1:5]`.  
+- **Output Inconsistency**: The `one_hot_df` output shows boolean values (`True`/`False`) instead of 0/1. Fix with `.astype(int)`.  
+- **Documentation Mismatch**: The table describing columns uses `sepal length (cm)` instead of `SepalLengthCm`, which could confuse users.  
+- **Execution Order**: Some cells (e.g., `df.shape`) lack outputs, suggesting incomplete execution. Ensure cells are run sequentially.
 
-*enc_df = pd.DataFrame(enc.fit_transform(df[['Species']]).toarray())
-df[['Species']] passes the 'Species' column as a DataFrame (2D input is required).
-fit_transform():
-fit learns the unique categories in 'Species'.
-transform converts each category into a one-hot encoded binary vector.
-.toarray() converts the output from sparse matrix to NumPy array.
-pd.DataFrame(...) converts that array into a DataFrame, which is stored in enc_df.
+---
 
-F. one_hot_df = pd.get_dummies(df, prefix="Species", columns=['Species'], drop_first=True)
-pd.get_dummies():
-Creates one-hot encoded columns for categorical data.
+### 7. Viva Preparation Tips
 
-df:
-The original DataFrame containing the 'Species' column to encode.
+**Key Questions to Prepare**:  
+1. **What is data wrangling, and why is it important?**  
+   - "Data wrangling is cleaning and transforming raw data for analysis. It’s important because raw data often has issues like missing values or incorrect formats that can lead to wrong results."  
+2. **What does `df.describe()` do?**  
+   - "It provides summary statistics (mean, min, max, etc.) for numerical columns, helping understand the data’s distribution."  
+3. **Why normalize data?**  
+   - "Normalization scales numerical features to a common range (0–1) to ensure fair contributions to machine learning models."  
+4. **Difference between LabelEncoder and OneHotEncoder?**  
+   - "LabelEncoder assigns integers to categories (e.g., 0, 1, 2), assuming an order. OneHotEncoder creates binary columns for each category, suitable for non-ordinal data."  
+5. **What is the dummy variable trap, and how does `drop_first=True` help?**  
+   - "The dummy variable trap occurs when one-hot encoded columns are redundant (e.g., three columns for three categories). `drop_first=True` removes one column to avoid this."
 
-columns=['Species']:
-Specifies the column(s) to be one-hot encoded.
+---
 
-prefix="Species":
-Sets the prefix for new column names (e.g., Species_versicolor, Species_virginica).
-
-drop_first=True:
-Drops the first category to avoid dummy variable trap (perfect multicollinearity in regression).
-
-G. df.dropna(inplace=True)  # Remove rows with missing values
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ALGORITHM :-
-1.Data Loading: Import and load the dataset.
-
-2.Data Cleaning: Handle missing values and duplicates.
-
-3.Exploratory Analysis: Understand data distributions and types.
-
-4.Normalization/Scaling: Prepare numerical features for modeling.
-
-5.Categorical Encoding: Convert text data to numerical form.
-
-6.Outlier Handling: Identify and remove anomalies.
-
-7.Final Verification: Ensure all transformations are correctly applied.
