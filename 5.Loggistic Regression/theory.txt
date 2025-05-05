@@ -1,150 +1,278 @@
-A. Logistic Regression is a statistical model used for binary classification tasks — where the output is one of two possible classes (e.g., yes/no, 0/1, spam/not spam).
-    Instead of predicting exact values like in linear regression, it predicts the probability that a given input belongs to a particular class using the.It’s widely used in spam detection, disease diagnosis, fraud detection, etc.
-B.  from sklearn.linear_model import LogisticRegression
-    is used to import the LogisticRegression class from scikit-learn, which allows you to create and train a logistic regression model.
 
-C. Confusion Matrix
 
-Once the logistic regression model has been trained and tested, we need to evaluate its performance. One of the most effective ways to do this is by using the Confusion Matrix. It provides a detailed breakdown of how well the model has classified the data, showing the number of correct and incorrect predictions.
+### **3. Statement Explanation**
 
-A confusion matrix is a table used to evaluate the performance of a classification model.
+#### **Problem Statement Explanation**
+- **Task 1: Logistic Regression**:
+  - Build a logistic regression model to predict whether a user purchased a product (`Purchased` or `Spending Score`: 0 = No, 1 = Yes) based on features like `Age`, `EstimatedSalary` (or `Annual Income`), and possibly `Gender`.
+  - Logistic regression is suitable for binary classification, modeling the probability of class 1: \( P(y=1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + \dots)}} \).
+- **Task 2: Confusion Matrix and Metrics**:
+  - **Confusion Matrix**: A 2x2 table showing:
+    - TP: Correctly predicted 1s.
+    - FP: Incorrectly predicted 1s (actual 0).
+    - TN: Correctly predicted 0s.
+    - FN: Incorrectly predicted 0s (actual 1).
+  - **Metrics**:
+    - Accuracy: \( \frac{TP + TN}{TP + TN + FP + FN} \).
+    - Error Rate: \( 1 - \text{Accuracy} \).
+    - Precision: \( \frac{TP}{TP + FP} \) (proportion of predicted 1s that are correct).
+    - Recall: \( \frac{TP}{TP + FN} \) (proportion of actual 1s correctly predicted).
+- **Expected Workflow**:
+  1. Load Social_Network_Ads.csv.
+  2. Preprocess: Encode categorical features (e.g., `Gender`), scale numeric features, drop irrelevant columns (e.g., `User ID`).
+  3. Split data into train/test sets.
+  4. Train logistic regression model.
+  5. Compute confusion matrix and metrics.
+  6. Optionally predict new data or visualize results.
+- **Deliverables**:
+  - Trained model with coefficients.
+  - Confusion matrix and metrics (TP, FP, TN, FN, Accuracy, Error Rate, Precision, Recall).
+  - Optional: Predictions or plots.
 
-Components of the Confusion Matrix:
-True Positive (TP):
-The model correctly predicted positive (1) when the actual value was also positive (1).
-Example: The model correctly predicted that a user purchased the product.
+#### **Why the Provided Code Deviates**
+- **Dataset**: `data5.csv` (199 rows, `Spending Score`) may not be the standard Social_Network_Ads.csv (400 rows, `Purchased`).
+- **Features**: Includes `CustomerID` (irrelevant) and drops `Genre` (potentially useful).
+- **Metrics**: Omits Error Rate.
+- **Preprocessing**: Lacks scaling and data quality checks.
 
-False Negative (FN):
-The model predicted negative (0) but the actual value was positive (1).
-Example: The model predicted that a user did not purchase the product, but in reality, they did.
+---
 
-False Positive (FP):
-The model predicted positive (1) but the actual value was negative (0).
-Example: The model predicted that a user purchased the product, but they did not.
+### **4. Code Blocks Explanation**
 
-True Negative (TN):
-The model correctly predicted negative (0) when the actual value was also negative (0).
-Example: The model correctly predicted that a user did not purchase the product.
+Below, I’ll explain each code block in `assignment5.ipynb`, highlighting its purpose, issues, and relevance to the problem statement.
 
-D. Performance Metrics Defined from the Confusion Matrix
-1. Accuracy
-Accuracy is the ratio of correctly predicted observations to the total observations. It provides a general measure of how often the model is correct.
-2. Precision
-Precision measures how many of the predicted positive cases were actually positive.
-3.Recall (Sensitivity or True Positive Rate)
-Recall measures how many actual positive cases were correctly identified.
-4. F-measure (F1-Score)
-The F-measure is the harmonic mean of precision and recall, used to compare the performance of classifier models.
+#### **Block 1: Imports**
+```python
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix
+```
+- **Purpose**: Imports libraries for data handling (`pandas`, `numpy`), data splitting (`train_test_split`), logistic regression (`LogisticRegression`), and evaluation (`confusion_matrix`).
+- **Explanation**:
+  - `pandas`: Loads and manipulates `data5.csv`.
+  - `numpy`: Handles arrays for `X` and `y`.
+  - `sklearn`: Provides modeling and evaluation tools.
+- **Status**: Correct, but could include `StandardScaler` for preprocessing and `matplotlib`/`seaborn` for visualization.
+- **Viva Note**:
+  - **Question**: Why import `confusion_matrix`?
+    - Answer: To compute TP, FP, TN, FN for classification performance.
 
-E. The sigmoid function (also called the logistic function) produces an S-shaped curve that maps any real-valued number to a value between 0 and 1.
+#### **Block 2: Load Data**
+```python
+df = pd.read_csv('/content/data5.csv')
+```
+- **Purpose**: Loads `data5.csv` into a DataFrame.
+- **Explanation**:
+  - Reads CSV with columns: `CustomerID`, `Genre`, `Age`, `Annual Income`, `Spending Score`.
+- **Issues**:
+  - Assumes file path `/content/data5.csv` (Colab-specific); may need adjustment for other environments.
+  - Dataset may not be the standard Social_Network_Ads.csv (199 vs. 400 rows).
+- **Viva Note**:
+  - **Question**: What’s in `data5.csv`?
+    - Answer: 199 rows with `CustomerID`, `Genre`, `Age`, `Annual Income`, `Spending Score` (0/1).
 
-Key Properties:
-1. Output Range:
-If the input approaches positive infinity, the predicted value becomes 1.
+#### **Block 3: Drop Gender**
+```python
+df1 = df.drop("Genre", axis=1)
+```
+- **Purpose**: Removes `Genre` (Gender) column.
+- **Explanation**:
+  - `drop("Genre", axis=1)`: Drops the column, leaving `CustomerID`, `Age`, `Annual Income`, `Spending Score`.
+- **Issues**:
+  - Drops `Genre` without justification; encoding it (e.g., 0=Male, 1=Female) could add predictive power.
+  - Keeps `CustomerID`, which is irrelevant.
+- **Viva Note**:
+  - **Question**: Why drop `Genre`?
+    - Answer: Likely to simplify, but encoding it could improve the model.
+  - **Question**: Should `CustomerID` be dropped?
+    - Answer: Yes, it’s an identifier, not a predictor.
 
-If the input approaches negative infinity, the predicted value becomes 0.
+#### **Block 4: Define Features and Target**
+```python
+y = df1.iloc[:, -1].values  # Target variable
+X = df1.iloc[:, :-1].values  # Feature set
+```
+- **Purpose**: Sets `Spending Score` as target (`y`) and `CustomerID`, `Age`, `Annual Income` as features (`X`).
+- **Explanation**:
+  - `df1.iloc[:, -1]`: Selects `Spending Score` (last column).
+  - `df1.iloc[:, :-1]`: Selects all columns except the last (`CustomerID`, `Age`, `Annual Income`).
+  - `.values`: Converts to numpy arrays.
+- **Issues**:
+  - Includes `CustomerID` in `X`, which is meaningless for prediction.
+- **Viva Note**:
+  - **Question**: Why use `.values`?
+    - Answer: `sklearn` expects numpy arrays for `X` and `y`.
 
-2. Classification Threshold (0.5):
+#### **Block 5: Train-Test Split**
+```python
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=2)
+```
+- **Purpose**: Splits data into 75% training (≈149 samples) and 25% testing (≈50 samples).
+- **Explanation**:
+  - `test_size=0.25`: 25% for testing.
+  - `random_state=2`: Ensures reproducibility.
+- **Status**: Correct, though 80/20 split is more common.
+- **Viva Note**:
+  - **Question**: Why split data?
+    - Answer: Training set builds the model; test set evaluates performance on unseen data.
 
-If the sigmoid output is ≥ 0.5, the result is classified as 1 (YES).
+#### **Block 6: Train Model**
+```python
+LR = LogisticRegression()
+LR.fit(X_train, y_train)
+```
+- **Purpose**: Trains a logistic regression model.
+- **Explanation**:
+  - `LogisticRegression()`: Initializes model with default parameters.
+  - `fit`: Learns coefficients to predict \( P(y=1) \).
+- **Issues**:
+  - No feature scaling, which can affect convergence and performance.
+- **Viva Note**:
+  - **Question**: What does logistic regression do?
+    - Answer: Predicts probability of class 1 using a sigmoid function.
 
-If the sigmoid output is < 0.5, the result is classified as 0 (NO).
+#### **Block 7: Confusion Matrix**
+```python
+y_pred = LR.predict(X_test)
+tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+```
+- **Purpose**: Predicts test set labels and computes confusion matrix.
+- **Explanation**:
+  - `predict`: Outputs class labels (0 or 1).
+  - `confusion_matrix`: Returns 2x2 matrix; `.ravel()` unpacks to TN, FP, FN, TP.
+- **Status**: Correct.
+- **Viva Note**:
+  - **Question**: What’s in the confusion matrix?
+    - Answer: TN (correct 0s), FP (0s predicted as 1), FN (1s predicted as 0), TP (correct 1s).
 
-F. types of logistic regression:
+#### **Block 8: Calculate Metrics**
+```python
+accuracy = (tn + tp) * 100 / (tp + tn + fp + fn)
+precision = tp / (tp + fp)
+recall = tp / (tp + fn)
+f1_score = (2 * precision * recall) / (precision + recall)
+specificity = tn / (tn + fp)
+```
+- **Purpose**: Computes classification metrics.
+- **Explanation**:
+  - Accuracy: Proportion of correct predictions.
+  - Precision: Correct 1s among predicted 1s.
+  - Recall: Correct 1s among actual 1s.
+  - F1 Score: Harmonic mean of Precision and Recall.
+  - Specificity: Correct 0s among actual 0s.
+- **Issues**:
+  - Omits Error Rate (\( 1 - \text{Accuracy} \)).
+  - No check for division by zero (e.g., if `tp + fp = 0`).
+- **Viva Note**:
+  - **Question**: Why is F1 Score useful?
+    - Answer: Balances Precision and Recall, especially for imbalanced data.
 
-1. Binary Logistic Regression
-Purpose: Predicts one of two possible outcomes (e.g., Yes/No, 0/1).
+#### **Block 9: Display Metrics**
+```python
+print(f"Accuracy: {accuracy:.2f}%")
+print(f"Precision: {precision:.2f}")
+print(f"Recall: {recall:.2f}")
+print(f"F1 Score: {f1_score:.2f}")
+print(f"Specificity: {specificity:.2f}")
+```
+- **Output**:
+  ```
+  Accuracy: 96.00%
+  Precision: 0.75
+  Recall: 0.75
+  F1 Score: 0.75
+  Specificity: 0.98
+  ```
+- **Explanation**:
+  - High Accuracy (96%) but lower Precision/Recall (0.75) suggest good performance on 0s (majority class) but weaker on 1s (minority class).
+- **Issues**:
+  - No Error Rate.
+- **Viva Note**:
+  - **Question**: Why is Accuracy high but Precision/Recall lower?
+    - Answer: Class imbalance; model performs better on 0s due to more 0s in data.
 
-Example: Spam detection (spam = 1, not spam = 0).
+#### **Block 10: User Input**
+```python
+print("Enter values for the following features:")
+input_features = []
+for i in range(X_train.shape[1]):
+    val = float(input(f"Feature {i+1}: "))
+    input_features.append(val)
+```
+- **Purpose**: Collects user input for `CustomerID`, `Age`, `Annual Income`.
+- **Issues**:
+  - Labels features as `Feature 1`, etc., without specifying names.
+  - Includes `CustomerID`, which is irrelevant.
+- **Viva Note**:
+  - **Question**: Why is user input useful?
+    - Answer: Allows testing model predictions on new data.
 
-2. Multinomial Logistic Regression
-Purpose: Predicts 3+ unordered categories (e.g., animal types: cat/dog/bird).
+#### **Block 11: Reshape Input**
+```python
+input_array = np.array(input_features).reshape(1, -1)
+```
+- **Purpose**: Converts input list to a 2D numpy array for prediction.
+- **Explanation**:
+  - `reshape(1, -1)`: Ensures shape (1, 3) for `sklearn`.
+- **Status**: Correct.
+- **Viva Note**:
+  - **Question**: Why reshape input?
+    - Answer: `predict` expects a 2D array (n_samples, n_features).
 
-Key: No inherent ranking among classes.
+#### **Block 12: Predict**
+```python
+prediction = LR.predict(input_array)[0]
+print(f"Predicted Output: {prediction}")
+```
+- **Output Example**:
+  ```
+  Predicted Output: 0
+  ```
+- **Purpose**: Predicts `Spending Score` for user input.
+- **Issues**:
+  - Uses unscaled input, inconsistent with training data.
+  - Includes `CustomerID`.
+- **Viva Note**:
+  - **Question**: What does prediction = 0 mean?
+    - Answer: User is predicted not to have high spending (class 0).
 
-3. Ordinal Logistic Regression
-Purpose: Predicts ordered categories (e.g., ratings: Low/Medium/High).
+---
 
-Key: Respects the hierarchy between classes.
---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-1. Data Preparation Phase
-1. Import necessary libraries:
-pandas (for data manipulation)
-numpy (for numerical operations)
-sklearn (for machine learning tools)
-train_test_split (for data splitting)
-LogisticRegression (for model)
-confusion_matrix (for evaluation)
+### **5. Theoretical Aspects**
 
-2. Load the dataset:
+#### **Logistic Regression**
+- **Definition**: Models the probability of a binary outcome (e.g., \( P(y=1) \)) using the logistic function: \( P(y=1) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 x_1 + \dots)}} \).
+- **Parameters**:
+  - \(\beta_0\): Intercept.
+  - \(\beta_i\): Coefficients for each feature.
+- **Objective**: Maximize likelihood of observed data (minimize log-loss).
+- **Assumptions**:
+  - Linear relationship between features and log-odds.
+  - Independent observations.
+- **In the Code**:
+  - Predicts `Spending Score` (0/1) using `CustomerID`, `Age`, `Annual Income`.
 
-Read the CSV file into a pandas DataFrame
+#### **Confusion Matrix**
+- **Structure**:
+  - Rows: Actual classes (0, 1).
+  - Columns: Predicted classes (0, 1).
+  - Elements: TN, FP, FN, TP.
+- **Metrics**:
+  - Accuracy: Overall correctness.
+  - Error Rate: Proportion of incorrect predictions.
+  - Precision: Accuracy of positive predictions.
+  - Recall: Sensitivity to positive class.
+  - F1 Score: Balances Precision and Recall.
+  - Specificity: Accuracy of negative predictions.
 
-Example: df = pd.read_csv('/content/data5.csv')
+#### **Feature Scaling**
+- Logistic regression is sensitive to feature scales (e.g., `Age`: 18–59 vs. `Annual Income`: 15,000–150,000).
+- Scaling (e.g., `StandardScaler`) ensures equal feature contributions.
 
-3. Preprocess the data:
+#### **Class Imbalance**
+- `data5.csv` likely has more 0s than 1s (based on Precision/Recall = 0.75).
+- Imbalance can bias the model toward the majority class (0).
 
-Drop irrelevant columns (e.g., 'Genre' column)
 
-Separate features (X) and target variable (y)
-
-Features: all columns except last
-
-Target: last column
-
-2. Model Training Phase
-4. Split the data:
-
-Divide into training (75%) and testing (25%) sets
-
-Set random_state for reproducibility
-
-5.Initialize and train the model:
-
-Create LogisticRegression instance
-
-Fit the model to training data (X_train, y_train)
-
-3. Evaluation Phase
-6. Make predictions on test set:
-
-Use trained model to predict y_test values
-
-7. Compute confusion matrix:
-
-Extract TN, FP, FN, TP values
-
-8. Calculate performance metrics:
-
-Accuracy = (TN + TP) / (TP + TN + FP + FN)
-
-Precision = TP / (TP + FP)
-
-Recall = TP / (TP + FN)
-
-F1 Score = 2 * (Precision * Recall) / (Precision + Recall)
-
-Specificity = TN / (TN + FP)
-
-9. Display evaluation metrics:
-
-Print all calculated metrics with appropriate formatting
-
-4. Prediction Phase
-10 Get user input for new prediction:
-
-Prompt user to enter values for each feature
-
-Store values in a list
-
-11. Prepare input for prediction:
-
-Convert list to numpy array
-
-Reshape to match model's expected input format
-
-12. Make and display prediction:
-
-Use trained model to predict class
-
-Output the predicted result (0 or 1) . The logistic regression model outputs a predicted class of 0 or 1 because it is designed for binary classification tasks, where the target variable has only two possible outcomes.
