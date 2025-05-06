@@ -288,41 +288,6 @@ If using `train.csv` from Kaggle:
 
 ---
 
-### **6. Setup Requirements**
-
-#### **VS Code**
-- **Environment**:
-  - Install Python (3.8+).
-  - Install VS Code with Python and Jupyter extensions.
-- **Dependencies**:
-  - Install: `pip install pandas numpy scikit-learn matplotlib`.
-  - Verify: `python -c "import pandas, numpy, sklearn, matplotlib"`.
-- **File Setup**:
-  - Save code as `boston_housing_regression.py` or `boston_housing_regression.ipynb`.
-  - If using CSV, place `train.csv` in the same directory.
-- **Configuration**:
-  - Select Python interpreter (Ctrl+Shift+P → “Python: Select Interpreter”).
-  - Ensure file paths (if using CSV) are correct.
-- **Notes**:
-  - Run script or notebook cells sequentially.
-  - Check for `ModuleNotFoundError` or file path issues.
-
-#### **Google Colab**
-- **Environment**:
-  - Access Colab via browser; `pandas`, `numpy`, `scikit-learn`, `matplotlib` are pre-installed.
-- **File Setup**:
-  - If using CSV, upload `train.csv`:
-    - Click “Files” → “Upload”.
-    - Update path: `pd.read_csv('/content/train.csv')`.
-  - Paste code into a notebook cell.
-- **Configuration**:
-  - Run cells sequentially.
-  - No additional installations needed (all libraries are pre-installed).
-- **Notes**:
-  - Re-upload CSV each session.
-  - Save notebook to Google Drive.
-
----
 
 ### **7. Viva Preparation Tips**
 
