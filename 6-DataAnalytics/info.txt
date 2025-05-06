@@ -256,6 +256,15 @@ print(f"The predicted class for age {age} and salary {salary} is: {prediction[0]
 
 ---
 
+
+
+
+
+
+
+
+
+
 ### **Theory-Related Concepts**
 
 Let’s dive into the theoretical concepts underpinning this practical.
